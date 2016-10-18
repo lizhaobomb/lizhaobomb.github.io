@@ -14,4 +14,4 @@ date: 2016-10-14 17:35:22
 
 最后上传一个截图
 
-![](https://lizhaobomb.github.io/source/tags/xcode.png)
+![](https://github.com/lizhaobomb/lizhaobomb.github.io/blob/master/tags/xcode.png)
