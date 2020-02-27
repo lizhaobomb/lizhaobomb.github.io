@@ -5,7 +5,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://yoursite.com/"/>
-  <updated>2016-10-08T14:35:23.000Z</updated>
+  <updated>2020-02-27T15:21:00.192Z</updated>
   <id>http://yoursite.com/</id>
   
   <author>
@@ -14,6 +14,122 @@
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>iOS性能优化02-产生卡顿的原因</title>
+    <link href="http://yoursite.com/2020/02/27/%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%9602-%E5%8D%A1%E9%A1%BF%E4%BA%A7%E7%94%9F%E7%9A%84%E5%8E%9F%E5%9B%A0/"/>
+    <id>http://yoursite.com/2020/02/27/性能优化02-卡顿产生的原因/</id>
+    <published>2020-02-27T13:20:47.000Z</published>
+    <updated>2020-02-27T15:21:00.192Z</updated>
+    
+    <content type="html"><![CDATA[<h1 id="iOS性能优化02-产生卡顿的原因"><a href="#iOS性能优化02-产生卡顿的原因" class="headerlink" title="iOS性能优化02-产生卡顿的原因"></a>iOS性能优化02-产生卡顿的原因</h1><ul>
+<li>卡顿产生的主要原因CPU和GPU所花费的时间太长从而造成俗称的丢帧（掉帧）</li>
+</ul>
+<p>我们以下图为例，红色代表CPU，绿色代表GPU</p>
+<p><img src="https://img.rruu.net/image/5e57d298d000f" alt=""></p>
+<ol>
+<li><p>首先把CPU把计算好的数据交给GPU去渲染，紧接着来一个VSync（垂直同步信号）就会把刚CPU计算好并且GPU渲染好的数据展示到屏幕上完成这一帧的显示，注意一旦发生一个VSync就会把GPU渲染到帧缓存里的数据显示到屏幕上，并且开始下一帧的操作，</p>
+</li>
+<li><p>我们第二帧的操作GPU花费的时间比较短还留出一段空闲时间等VSync的到来然后显示到屏幕上，但也有一种情况就是：</p>
+</li>
+<li><p>我们第三帧的操作，CPU计算完数据交给GPU去渲染，然而由于这次的数据比较多当VSync到来时，发现GPU还没有渲染完，上面我们也说了VSync一旦到来就会把GPU渲染到帧缓存里的数据显示到屏幕上，但是GPU并没有渲染完，所以只能显示上一帧的数据，也就意味着当前这帧数据丢失了，俗称丢帧或掉帧，而当前帧只能等下次VSync到来时再显示，因此就会造成卡顿（本来要显示当前帧结果只能显示前一帧）</p>
+</li>
+</ol>
+<h1 id="卡顿解决的主要思路："><a href="#卡顿解决的主要思路：" class="headerlink" title="卡顿解决的主要思路："></a>卡顿解决的主要思路：</h1><ul>
+<li>尽可能减少CPU、GPU资源消耗</li>
+<li>一般我们要保证每秒60帧这样看起来就不会有什么问题了，那按照60FPS的刷帧率，每个16ms就会有一次VSync信号（为什么是16ms？因为1s=1000ms，1000ms/60~16ms）也就是说我们16ms内完成CPU和GPU操作就不会有什么卡顿问题了</li>
+</ul>
+<p>喜欢的朋友可以扫描关注我的公众号(多谢支持）</p>
+<p><img src="https://img.rruu.net/image/5e57d1ec32781" alt=""></p>
+]]></content>
+    
+    <summary type="html">
+    
+      &lt;h1 id=&quot;iOS性能优化02-产生卡顿的原因&quot;&gt;&lt;a href=&quot;#iOS性能优化02-产生卡顿的原因&quot; class=&quot;headerlink&quot; title=&quot;iOS性能优化02-产生卡顿的原因&quot;&gt;&lt;/a&gt;iOS性能优化02-产生卡顿的原因&lt;/h1&gt;&lt;ul&gt;
+&lt;li&gt;卡顿产生
+    
+    </summary>
+    
+    
+      <category term="iOS" scheme="http://yoursite.com/tags/iOS/"/>
+    
+      <category term="性能优化" scheme="http://yoursite.com/tags/%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>iOS性能优化01-CPU和GPU</title>
+    <link href="http://yoursite.com/2020/02/27/%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%9601-CPU%E5%92%8CGPU/"/>
+    <id>http://yoursite.com/2020/02/27/性能优化01-CPU和GPU/</id>
+    <published>2020-02-27T13:20:47.000Z</published>
+    <updated>2020-02-27T15:20:27.210Z</updated>
+    
+    <content type="html"><![CDATA[<h1 id="性能优化01-CPU和GPU"><a href="#性能优化01-CPU和GPU" class="headerlink" title="性能优化01-CPU和GPU"></a>性能优化01-CPU和GPU</h1><h2 id="在屏幕成像的过程中-CPU和GPU起着至关重要的作用"><a href="#在屏幕成像的过程中-CPU和GPU起着至关重要的作用" class="headerlink" title="在屏幕成像的过程中,CPU和GPU起着至关重要的作用"></a>在屏幕成像的过程中,CPU和GPU起着至关重要的作用</h2><ul>
+<li><p>CPU(Centeral Processing Unit，中央处理器)<br>对象的创建和销毁，对象属性的调整，布局计算，文本的计算和排版，图片的格式转换和解码、图像的绘制（Core Graphics）</p>
+</li>
+<li><p>GPU（Graphics Processing Unit，图形处理器）<br>纹理的渲染</p>
+</li>
+<li><p>CPU 和 GPU 工作原理</p>
+<p>  CPU –计算–&gt;GPU–渲染–&gt;帧缓存–读取–&gt;视频控制器–显示–&gt;屏幕</p>
+</li>
+</ul>
+<ul>
+<li>iOS中是双缓存机制，有前帧缓存，后帧缓存</li>
+</ul>
+<h1 id="屏幕成像原理"><a href="#屏幕成像原理" class="headerlink" title="屏幕成像原理"></a>屏幕成像原理</h1><p>垂直同步信号（VSync）水平同步信号（HSync）</p>
+<p>屏幕要显示一帧画面之前首先会发送一个VSync，紧接着就是一行一行的HSync，当<br>发送最后一行HSync的时候，就会接着发送下一个VSync，这样周而复始就是我们看到的屏幕画面了</p>
+<p>VSync</p>
+<p>|—————-&gt;  HSync</p>
+<p>|—————-&gt;</p>
+<p>|—————-&gt;</p>
+<p>|—————-&gt;</p>
+]]></content>
+    
+    <summary type="html">
+    
+      &lt;h1 id=&quot;性能优化01-CPU和GPU&quot;&gt;&lt;a href=&quot;#性能优化01-CPU和GPU&quot; class=&quot;headerlink&quot; title=&quot;性能优化01-CPU和GPU&quot;&gt;&lt;/a&gt;性能优化01-CPU和GPU&lt;/h1&gt;&lt;h2 id=&quot;在屏幕成像的过程中-CPU和GPU
+    
+    </summary>
+    
+    
+      <category term="iOS" scheme="http://yoursite.com/tags/iOS/"/>
+    
+      <category term="性能优化" scheme="http://yoursite.com/tags/%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>宏和const的区别</title>
+    <link href="http://yoursite.com/2016/11/02/%E5%AE%8F%E5%92%8Cconst%E7%9A%84%E5%8C%BA%E5%88%AB/"/>
+    <id>http://yoursite.com/2016/11/02/宏和const的区别/</id>
+    <published>2016-11-02T13:20:47.000Z</published>
+    <updated>2020-02-27T15:21:55.213Z</updated>
+    
+    <content type="html"><![CDATA[<p>1、编译的时刻不一样<br>2、</p>
+<p>const的简单实用</p>
+<p>const作用：1.修饰右边基本变量或者指针变量 int a int *p<br>          2.被const修饰变量只读</p>
+<p>int <em> const p;     //p只读，</em>p可以改    </p>
+<p>int const <em> p;    //</em>p只读， p可以改</p>
+<p>const int <em>p;     // </em>p只读，p变量</p>
+<p>const int *const p;     //都是只读</p>
+<p>int const *const p;    //都是只读</p>
+]]></content>
+    
+    <summary type="html">
+    
+      &lt;p&gt;1、编译的时刻不一样&lt;br&gt;2、&lt;/p&gt;
+&lt;p&gt;const的简单实用&lt;/p&gt;
+&lt;p&gt;const作用：1.修饰右边基本变量或者指针变量 int a int *p&lt;br&gt;          2.被const修饰变量只读&lt;/p&gt;
+&lt;p&gt;int &lt;em&gt; const p;     
+    
+    </summary>
+    
+    
+      <category term="宏" scheme="http://yoursite.com/tags/%E5%AE%8F/"/>
+    
+      <category term="const" scheme="http://yoursite.com/tags/const/"/>
+    
+  </entry>
   
   <entry>
     <title>Hello World</title>

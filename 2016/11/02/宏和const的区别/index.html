@@ -3,21 +3,36 @@
 <head>
   <meta charset="utf-8">
   
-  <title>Hello World | Hexo</title>
+  <title>宏和const的区别 | Hexo</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="Welcome to Hexo! This is your very first post. Check documentation for more info. If you get any problems when using Hexo, you can find the answer in troubleshooting or you can ask me on GitHub.
-Quick">
+  <meta name="description" content="1、编译的时刻不一样2、
+const的简单实用
+const作用：1.修饰右边基本变量或者指针变量 int a int *p          2.被const修饰变量只读
+int  const p;     //p只读，p可以改    
+int const  p;    //p只读， p可以改
+const int p;     // p只读，p变量
+const int *const p;">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Hello World">
-<meta property="og:url" content="http://yoursite.com/2016/10/08/hello-world/index.html">
+<meta property="og:title" content="宏和const的区别">
+<meta property="og:url" content="http://yoursite.com/2016/11/02/宏和const的区别/index.html">
 <meta property="og:site_name" content="Hexo">
-<meta property="og:description" content="Welcome to Hexo! This is your very first post. Check documentation for more info. If you get any problems when using Hexo, you can find the answer in troubleshooting or you can ask me on GitHub.
-Quick">
-<meta property="og:updated_time" content="2016-10-08T14:35:23.000Z">
+<meta property="og:description" content="1、编译的时刻不一样2、
+const的简单实用
+const作用：1.修饰右边基本变量或者指针变量 int a int *p          2.被const修饰变量只读
+int  const p;     //p只读，p可以改    
+int const  p;    //p只读， p可以改
+const int p;     // p只读，p变量
+const int *const p;">
+<meta property="og:updated_time" content="2020-02-27T15:21:55.213Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Hello World">
-<meta name="twitter:description" content="Welcome to Hexo! This is your very first post. Check documentation for more info. If you get any problems when using Hexo, you can find the answer in troubleshooting or you can ask me on GitHub.
-Quick">
+<meta name="twitter:title" content="宏和const的区别">
+<meta name="twitter:description" content="1、编译的时刻不一样2、
+const的简单实用
+const作用：1.修饰右边基本变量或者指针变量 int a int *p          2.被const修饰变量只读
+int  const p;     //p只读，p可以改    
+int const  p;    //p只读， p可以改
+const int p;     // p只读，p变量
+const int *const p;">
   
     <link rel="alternate" href="/atom.xml" title="Hexo" type="application/atom+xml">
   
@@ -66,10 +81,10 @@ Quick">
   </div>
 </header>
       <div class="outer">
-        <section id="main"><article id="post-hello-world" class="article article-type-post" itemscope itemprop="blogPost">
+        <section id="main"><article id="post-宏和const的区别" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
-    <a href="/2016/10/08/hello-world/" class="article-date">
-  <time datetime="2016-10-08T14:35:23.000Z" itemprop="datePublished">2016-10-08</time>
+    <a href="/2016/11/02/宏和const的区别/" class="article-date">
+  <time datetime="2016-11-02T13:20:47.000Z" itemprop="datePublished">2016-11-02</time>
 </a>
     
   </div>
@@ -80,7 +95,7 @@ Quick">
         
   
     <h1 class="article-title" itemprop="name">
-      Hello World
+      宏和const的区别
     </h1>
   
 
@@ -88,37 +103,43 @@ Quick">
     
     <div class="article-entry" itemprop="articleBody">
       
-        <p>Welcome to <a href="https://hexo.io/" target="_blank" rel="external">Hexo</a>! This is your very first post. Check <a href="https://hexo.io/docs/" target="_blank" rel="external">documentation</a> for more info. If you get any problems when using Hexo, you can find the answer in <a href="https://hexo.io/docs/troubleshooting.html" target="_blank" rel="external">troubleshooting</a> or you can ask me on <a href="https://github.com/hexojs/hexo/issues" target="_blank" rel="external">GitHub</a>.</p>
-<h2 id="Quick-Start"><a href="#Quick-Start" class="headerlink" title="Quick Start"></a>Quick Start</h2><h3 id="Create-a-new-post"><a href="#Create-a-new-post" class="headerlink" title="Create a new post"></a>Create a new post</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ hexo new <span class="string">"My New Post"</span></div></pre></td></tr></table></figure>
-<p>More info: <a href="https://hexo.io/docs/writing.html" target="_blank" rel="external">Writing</a></p>
-<h3 id="Run-server"><a href="#Run-server" class="headerlink" title="Run server"></a>Run server</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ hexo server</div></pre></td></tr></table></figure>
-<p>More info: <a href="https://hexo.io/docs/server.html" target="_blank" rel="external">Server</a></p>
-<h3 id="Generate-static-files"><a href="#Generate-static-files" class="headerlink" title="Generate static files"></a>Generate static files</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ hexo generate</div></pre></td></tr></table></figure>
-<p>More info: <a href="https://hexo.io/docs/generating.html" target="_blank" rel="external">Generating</a></p>
-<h3 id="Deploy-to-remote-sites"><a href="#Deploy-to-remote-sites" class="headerlink" title="Deploy to remote sites"></a>Deploy to remote sites</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ hexo deploy</div></pre></td></tr></table></figure>
-<p>More info: <a href="https://hexo.io/docs/deployment.html" target="_blank" rel="external">Deployment</a></p>
+        <p>1、编译的时刻不一样<br>2、</p>
+<p>const的简单实用</p>
+<p>const作用：1.修饰右边基本变量或者指针变量 int a int *p<br>          2.被const修饰变量只读</p>
+<p>int <em> const p;     //p只读，</em>p可以改    </p>
+<p>int const <em> p;    //</em>p只读， p可以改</p>
+<p>const int <em>p;     // </em>p只读，p变量</p>
+<p>const int *const p;     //都是只读</p>
+<p>int const *const p;    //都是只读</p>
 
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2016/10/08/hello-world/" data-id="ck74waryp0000b17rs9w6ug4g" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2016/11/02/宏和const的区别/" data-id="ck74wbyrp0000bm7r2hizh02m" class="article-share-link">Share</a>
       
       
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/const/">const</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/宏/">宏</a></li></ul>
+
     </footer>
   </div>
   
     
 <nav id="article-nav">
   
-    <a href="/2016/11/02/宏和const的区别/" id="article-nav-newer" class="article-nav-link-wrap">
+    <a href="/2020/02/27/性能优化01-CPU和GPU/" id="article-nav-newer" class="article-nav-link-wrap">
       <strong class="article-nav-caption">Newer</strong>
       <div class="article-nav-title">
         
-          宏和const的区别
+          iOS性能优化01-CPU和GPU
         
       </div>
     </a>
   
+  
+    <a href="/2016/10/08/hello-world/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">Hello World</div>
+    </a>
   
 </nav>
 
