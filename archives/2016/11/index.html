@@ -1,129 +1,77 @@
-<!DOCTYPE HTML>
-<html>
-<head>
-  <meta charset="utf-8">
-  
-  <title>Archiv: 2016/11 › Hexo</title>
-  <meta name="author" content="John Doe">
-  
-  
-  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<!DOCTYPE html><html><head><meta charset="UTF-8"><title></title><meta name="viewport" content="width=device-width, initial-scale=1"><link rel="stylesheet" href="/./css/style.css"></head><body><header class="al_header al_pos_fixed"><div class="al_header_container dis_flex_jcenter"><div class="al_header_container_left"><div class="al_header_site_title"><a href="/">Hexo</a></div></div><div class="dis_flex_jcenter"><div class="al_header_setting"><svg class="al_header_icon"><use xmlns="http://www.w3.org/2000/svg" xlink:href="/assets/svg_icons.svg#svg-menu"></use></svg></div></div></div></header><div class="al_sidebar"><div class="al_sidebar_overlay al_full_cover"></div><div class="al_pos_fixed al_sidebar_cnt"><div class="dis_flex_acenter al_sidebar_header"><h3>Hexo</h3><div class="al_sidebar_close al_header_setting"><svg class="al_header_icon"><use xmlns="http://www.w3.org/2000/svg" xlink:href="/assets/svg_icons.svg#svg-close"></use></svg></div></div><div class="al_sidebar_author_cnt"><div class="al_sidebar_author_info"><h4>John Doe</h4><img class="al_sidebar_avatar" src="https://cdn.iguan7u.cn/image/avatar.jpg"><p></p></div></div></div></div><div class="al_index_background dis_flex_center al_full_cover"><div class="al_pos_ab al_letter al_index_background_letter">A</div><h2 class="al_index_background_bio">A Beautiful Text Site.</h2></div><div class="al_index_container"><div class="al_pos_ab al_fake_background"></div><div class="al_main_container"><div class="al_section_container dis_flex_jcenter"><div class="section_header">LATEST PAGES</div></div><ur class="al_post_list"><li class="al_index_pageList_item al_index_page_seperator"><div class="al_index_post_title_cnt dis_flex"><div class="al_pos_ab al_letter al_index_post_title_letter">i</div><h2 class="al_index_post_title"><a href="/2020/02/29/iOS性能优化03-卡顿优化01-CPU/">iOS性能优化03-卡顿优化01-CPU</a></h2><div class="al_index_post_extra dis_flex"><div class="al_index_post_date al_index_post_extra_item">Feb 29</div><div class="al_index_post_read_time">2 Min Read</div></div></div><div class="al_index_post_excerpt_cnt"><p class="al_index_post_excerpt">* 尽量使用轻量级的对象，比如用不到事件处理的地方，可以考虑使用CALayer取代UIView
+   
+   
+ * 不要频繁的调用UIView的相关属性，比如frame、bounds、transform等属性，尽量减少不必要的修改
+   
+   
+ * 尽量提前计算好布局，在有需要时一次性调整对应的属性，不要多次修改属性
+   
+   
+ * Autolayout会比直接设置frame消耗更多的CPU资源
+   
+   
+ * 图片的size,最好刚好跟UIImageView的size保持一致
+   
+   
+ * 控制一下线程的最大并发数量
+   
+   
+ * 尽量把耗时的操作放到子线程...</p></div><div class="al_index_post_button_cnt dis_flex"><a class="al_button al_button_red al_index_post_button" href="/2020/02/29/iOS性能优化03-卡顿优化01-CPU/">READ ON</a><a class="al_button al_button_white al_index_post_button" href="https://getpocket.com/edit?url=http%3A%2F%2Fyoursite.com%2F%2F2020%2F02%2F29%2FiOS%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%9603-%E5%8D%A1%E9%A1%BF%E4%BC%98%E5%8C%9601-CPU%2F">READ LATER</a></div></li><li class="al_index_pageList_item al_index_page_seperator"><div class="al_index_post_title_cnt dis_flex"><div class="al_pos_ab al_letter al_index_post_title_letter">i</div><h2 class="al_index_post_title"><a href="/2020/02/27/iOS性能优化02-卡顿产生的原因/">iOS性能优化02-产生卡顿的原因</a></h2><div class="al_index_post_extra dis_flex"><div class="al_index_post_date al_index_post_extra_item">Feb 27</div><div class="al_index_post_read_time">1 Min Read</div></div></div><div class="al_index_post_excerpt_cnt"><p class="al_index_post_excerpt">* 卡顿产生的主要原因CPU和GPU所花费的时间太长从而造成俗称的丢帧（掉帧）
 
-  
-  <meta property="og:site_name" content="Hexo"/>
-
-  
-    <meta property="og:image" content="undefined"/>
-  
-
-  <link href="/favicon.png" rel="icon">
-  <link rel="alternate" href="/atom.xml" title="Hexo" type="application/atom+xml">
-  <link rel="stylesheet" href="/css/style.css" media="screen" type="text/css">
-  <!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
-  
-
-</head>
+我们以下图为例，红色代表CPU，绿色代表GPU
 
 
-<body>
-  <header id="header"><div class="meta inner">
-  <h1><a href="/">Hexo</a></h1>
-  <h2><a href="/"></a></h2>
-  <nav id="main-nav">
-    <ul>
-      
-      <li><a href="/about">About</a></li>
-      
-      <li><a href="/archives">Archives</a></li>
-      
-      <li><a href="/atom.xml">RSS</a></li>
-      
-    </ul>
-    <div class="clearfix"></div>
-  </nav>
-</div>
-<div class="clearfix"></div>
-</header>
-  <div id="content" class="inner">
-    <div id="main-col" class="alignleft"><div id="wrapper">
-<h2 class="archive-title">2016/11</h2>
 
-
-  <div class="archive">
+ 1. 首先把CPU把计算好的数据交给GPU去渲染，紧接着来一个VSync（垂直同步信号）就会把刚CPU计算好并且GPU渲染好的数据展示到屏幕上完成这一帧的显示，注意一旦发生一个VSync就会把GPU渲染到帧缓存里的数据显示到屏幕上，并且开始下一帧的操作，
     
-      <article class="post">
-        <div class="post-content">
-          <header>
-            
-              <h2 class="archive-post"><span datetime="2016-11-02T13:20:47.000Z">2016-11-02</span><a href="/2016/11/02/宏和const的区别/">宏和const的区别</a></h1>
-            
-          </header>
-        </div>
-      </article>
     
-  </div>
-
-</div></div>
-    <aside id="sidebar" class="alignright">
-  <div class="search">
-  <form action="//google.com/search" method="get" accept-charset="utf-8">
-    <input type="search" name="q" results="0" placeholder="Suche">
-    <input type="hidden" name="q" value="site:yoursite.com">
-  </form>
-</div>
-
-  
-<div class="widget tag">
-  <h3 class="title">Neueste Artikel</h3>
-  <ul class="entry">
+ 2. 我们第二帧的操作GPU花费的时间比较短还留出一段空闲时间等VSync的到来然后显示到屏幕上，但也有一种情况就是：
     
-      <li>
-        <a href="/2020/02/29/iOS性能优化03-卡顿优化01-CPU/">iOS性能优化03-卡顿优化01-CPU</a>
-      </li>
     
-      <li>
-        <a href="/2020/02/27/iOS性能优化01-CPU和GPU/">iOS性能优化01-CPU和GPU</a>
-      </li>
-    
-      <li>
-        <a href="/2020/02/27/iOS性能优化02-卡顿产生的原因/">iOS性能优化02-产生卡顿的原因</a>
-      </li>
-    
-      <li>
-        <a href="/2016/11/02/宏和const的区别/">宏和const的区别</a>
-      </li>
-    
-      <li>
-        <a href="/2016/10/08/hello-world/">Hello World</a>
-      </li>
-    
-  </ul>
-</div>
+ 3. 我们第三帧的操作，CPU计算完数据交...</p></div><div class="al_index_post_button_cnt dis_flex"><a class="al_button al_button_red al_index_post_button" href="/2020/02/27/iOS性能优化02-卡顿产生的原因/">READ ON</a><a class="al_button al_button_white al_index_post_button" href="https://getpocket.com/edit?url=http%3A%2F%2Fyoursite.com%2F%2F2020%2F02%2F27%2FiOS%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%9602-%E5%8D%A1%E9%A1%BF%E4%BA%A7%E7%94%9F%E7%9A%84%E5%8E%9F%E5%9B%A0%2F">READ LATER</a></div></li><li class="al_index_pageList_item al_index_page_seperator"><div class="al_index_post_title_cnt dis_flex"><div class="al_pos_ab al_letter al_index_post_title_letter">i</div><h2 class="al_index_post_title"><a href="/2020/02/27/iOS性能优化01-CPU和GPU/">iOS性能优化01-CPU和GPU</a></h2><div class="al_index_post_extra dis_flex"><div class="al_index_post_date al_index_post_extra_item">Feb 27</div><div class="al_index_post_read_time">1 Min Read</div></div></div><div class="al_index_post_excerpt_cnt"><p class="al_index_post_excerpt">在屏幕成像的过程中,CPU和GPU起着至关重要的作用
+ * CPU(Centeral Processing Unit，中央处理器)
+   对象的创建和销毁，对象属性的调整，布局计算，文本的计算和排版，图片的格式转换和解码、图像的绘制（Core Graphics）
+   
+   
+ * GPU（Graphics Processing Unit，图形处理器）
+   纹理的渲染
+   
+   
+ * CPU 和 GPU 工作原理
+   
+    CPU –计算–&gt;GPU–渲染–&gt;帧缓存–读取–&gt;视频控制器–显示–&gt;屏幕
+   
+   
 
+ * iOS中是双缓存机制，有前帧缓存，后帧缓存
 
-  
+屏幕成像原...</p></div><div class="al_index_post_button_cnt dis_flex"><a class="al_button al_button_red al_index_post_button" href="/2020/02/27/iOS性能优化01-CPU和GPU/">READ ON</a><a class="al_button al_button_white al_index_post_button" href="https://getpocket.com/edit?url=http%3A%2F%2Fyoursite.com%2F%2F2020%2F02%2F27%2FiOS%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%9601-CPU%E5%92%8CGPU%2F">READ LATER</a></div></li><li class="al_index_pageList_item al_index_page_seperator"><div class="al_index_post_title_cnt dis_flex"><div class="al_pos_ab al_letter al_index_post_title_letter">宏</div><h2 class="al_index_post_title"><a href="/2016/11/02/宏和const的区别/">宏和const的区别</a></h2><div class="al_index_post_extra dis_flex"><div class="al_index_post_date al_index_post_extra_item">Nov 02</div><div class="al_index_post_read_time">1 Min Read</div></div></div><div class="al_index_post_excerpt_cnt"><p class="al_index_post_excerpt">1、编译的时刻不一样
+2、
 
-  
-<div class="widget tagcloud">
-  <h3 class="title">Tag-Cloud</h3>
-  <div class="entry">
-    <a href="/tags/const/" style="font-size: 10px;">const</a> <a href="/tags/iOS/" style="font-size: 20px;">iOS</a> <a href="/tags/宏/" style="font-size: 10px;">宏</a> <a href="/tags/性能优化/" style="font-size: 20px;">性能优化</a>
-  </div>
-</div>
+const的简单实用
 
-</aside>
-    <div class="clearfix"></div>
-  </div>
-  <footer id="footer" class="inner"><div class="alignleft">
-  
-  &copy; 2020 John Doe
-  
-</div>
-<div class="clearfix"></div></footer>
-  <script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+const作用：1.修饰右边基本变量或者指针变量 int a int *p
+2.被const修饰变量只读
 
+int const p; //p只读，p可以改 
 
+int const p; //p只读， p可以改
 
-</body>
-</html>
+const int p; // p只读，p变量
 
+const int *const p; //都是只读
+
+int const *const p; //都是只读...</p></div><div class="al_index_post_button_cnt dis_flex"><a class="al_button al_button_red al_index_post_button" href="/2016/11/02/宏和const的区别/">READ ON</a><a class="al_button al_button_white al_index_post_button" href="https://getpocket.com/edit?url=http%3A%2F%2Fyoursite.com%2F%2F2016%2F11%2F02%2F%E5%AE%8F%E5%92%8Cconst%E7%9A%84%E5%8C%BA%E5%88%AB%2F">READ LATER</a></div></li><li class="al_index_pageList_item al_index_page_seperator"><div class="al_index_post_title_cnt dis_flex"><div class="al_pos_ab al_letter al_index_post_title_letter">H</div><h2 class="al_index_post_title"><a href="/2016/10/08/hello-world/">Hello World</a></h2><div class="al_index_post_extra dis_flex"><div class="al_index_post_date al_index_post_extra_item">Oct 08</div><div class="al_index_post_read_time">1 Min Read</div></div></div><div class="al_index_post_excerpt_cnt"><p class="al_index_post_excerpt">Welcome to Hexo! This is your very first post. Check documentation for more info. If you get any problems when using Hexo, you can find the answer in troubleshooting or you can ask me on GitHub.
+
+Quick Start
+Create a new post
+1
+
+$ hexo new &quot;My New Post&quot;
+
+More info: Writing
+
+Run server
+1
+
+$ hexo serv...</p></div><div class="al_index_post_button_cnt dis_flex"><a class="al_button al_button_red al_index_post_button" href="/2016/10/08/hello-world/">READ ON</a><a class="al_button al_button_white al_index_post_button" href="https://getpocket.com/edit?url=http%3A%2F%2Fyoursite.com%2F%2F2016%2F10%2F08%2Fhello-world%2F">READ LATER</a></div></li></ur><nav class="dis_flex post-nav"><span class="prev"></span><span class="next"></span></nav></div></div><div class="al_index_footer dis_flex dis_flex_center"><div class="al_index_footer_item al_index_footer_title">John Doe</div><div class="al_index_footer_item al_index_footer_extra">Create By <a href="https://github.com/iGuan7u/Acetolog">AcetoLog </a>· Power By <a href="https://hexo.io/">Hexo</a></div><div class="al_index_footer_item al_index_footer_extra_right">All Right Reserved</div></div><script type="text/javascript" async="async" src="/javascripts/acelog.js"></script></body></html>
