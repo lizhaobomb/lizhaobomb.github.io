@@ -3,18 +3,20 @@
 <head>
   <meta charset="utf-8">
   
-  <title>iOS性能优化01-CPU和GPU › Hexo</title>
+  <title>iOS性能优化02-产生卡顿的原因 › Hexo</title>
   <meta name="author" content="John Doe">
   
-  <meta name="description" content="性能优化01-CPU和GPU在屏幕成像的过程中,CPU和GPU起着至关重要的作用
-CPU(Centeral Processing Unit，中央处理器)对象的创建和销毁，对象属性的调整，布局计算，文本的计算和排版，图片的格式转换和解码、图像的绘制（Core Graphics）
+  <meta name="description" content="卡顿产生的主要原因CPU和GPU所花费的时间太长从而造成俗称的丢帧（掉帧）
 
-GPU（Graphi">
+我们以下图为例，红色代表CPU，绿色代表GPU
+
+
+首先把CPU把计算好的数据交给GPU去渲染，紧接着来一个VSync（垂直同步信号）就会把刚CPU计算好并且GPU渲染好的数据展示到屏幕上完成这一帧的显示，注意一旦发生一个">
   
   
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
-  <meta property="og:title" content="iOS性能优化01-CPU和GPU"/>
+  <meta property="og:title" content="iOS性能优化02-产生卡顿的原因"/>
   <meta property="og:site_name" content="Hexo"/>
 
   
@@ -55,7 +57,7 @@ GPU（Graphi">
     <header>
       
   
-    <h1 class="title">iOS性能优化01-CPU和GPU</h1>
+    <h1 class="title">iOS性能优化02-产生卡顿的原因</h1>
   
 
       
@@ -64,25 +66,25 @@ GPU（Graphi">
     </header>
     <div class="entry">
       
-        <h1 id="性能优化01-CPU和GPU"><a href="#性能优化01-CPU和GPU" class="headerlink" title="性能优化01-CPU和GPU"></a>性能优化01-CPU和GPU</h1><h2 id="在屏幕成像的过程中-CPU和GPU起着至关重要的作用"><a href="#在屏幕成像的过程中-CPU和GPU起着至关重要的作用" class="headerlink" title="在屏幕成像的过程中,CPU和GPU起着至关重要的作用"></a>在屏幕成像的过程中,CPU和GPU起着至关重要的作用</h2><ul>
-<li><p>CPU(Centeral Processing Unit，中央处理器)<br>对象的创建和销毁，对象属性的调整，布局计算，文本的计算和排版，图片的格式转换和解码、图像的绘制（Core Graphics）</p>
-</li>
-<li><p>GPU（Graphics Processing Unit，图形处理器）<br>纹理的渲染</p>
-</li>
-<li><p>CPU 和 GPU 工作原理</p>
-<p>  CPU –计算–&gt;GPU–渲染–&gt;帧缓存–读取–&gt;视频控制器–显示–&gt;屏幕</p>
-</li>
+        <ul>
+<li>卡顿产生的主要原因CPU和GPU所花费的时间太长从而造成俗称的丢帧（掉帧）</li>
 </ul>
-<ul>
-<li>iOS中是双缓存机制，有前帧缓存，后帧缓存</li>
+<p>我们以下图为例，红色代表CPU，绿色代表GPU</p>
+<p><img src="https://img.rruu.net/image/5e57d298d000f" alt=""></p>
+<ol>
+<li><p>首先把CPU把计算好的数据交给GPU去渲染，紧接着来一个VSync（垂直同步信号）就会把刚CPU计算好并且GPU渲染好的数据展示到屏幕上完成这一帧的显示，注意一旦发生一个VSync就会把GPU渲染到帧缓存里的数据显示到屏幕上，并且开始下一帧的操作，</p>
+</li>
+<li><p>我们第二帧的操作GPU花费的时间比较短还留出一段空闲时间等VSync的到来然后显示到屏幕上，但也有一种情况就是：</p>
+</li>
+<li><p>我们第三帧的操作，CPU计算完数据交给GPU去渲染，然而由于这次的数据比较多当VSync到来时，发现GPU还没有渲染完，上面我们也说了VSync一旦到来就会把GPU渲染到帧缓存里的数据显示到屏幕上，但是GPU并没有渲染完，所以只能显示上一帧的数据，也就意味着当前这帧数据丢失了，俗称丢帧或掉帧，而当前帧只能等下次VSync到来时再显示，因此就会造成卡顿（本来要显示当前帧结果只能显示前一帧）</p>
+</li>
+</ol>
+<h1 id="卡顿解决的主要思路："><a href="#卡顿解决的主要思路：" class="headerlink" title="卡顿解决的主要思路："></a>卡顿解决的主要思路：</h1><ul>
+<li>尽可能减少CPU、GPU资源消耗</li>
+<li>一般我们要保证每秒60帧这样看起来就不会有什么问题了，那按照60FPS的刷帧率，每个16ms就会有一次VSync信号（为什么是16ms？因为1s=1000ms，1000ms/60~16ms）也就是说我们16ms内完成CPU和GPU操作就不会有什么卡顿问题了</li>
 </ul>
-<h1 id="屏幕成像原理"><a href="#屏幕成像原理" class="headerlink" title="屏幕成像原理"></a>屏幕成像原理</h1><p>垂直同步信号（VSync）水平同步信号（HSync）</p>
-<p>屏幕要显示一帧画面之前首先会发送一个VSync，紧接着就是一行一行的HSync，当<br>发送最后一行HSync的时候，就会接着发送下一个VSync，这样周而复始就是我们看到的屏幕画面了</p>
-<p>VSync</p>
-<p>|—————-&gt;  HSync</p>
-<p>|—————-&gt;</p>
-<p>|—————-&gt;</p>
-<p>|—————-&gt;</p>
+<p>喜欢的朋友可以扫描关注我的公众号(多谢支持）</p>
+<p><img src="https://img.rruu.net/image/5e57d1ec32781" alt=""></p>
 
       
     </div>
@@ -140,11 +142,15 @@ GPU（Graphi">
   <ul class="entry">
     
       <li>
-        <a href="/2020/02/27/性能优化02-卡顿产生的原因/">iOS性能优化02-产生卡顿的原因</a>
+        <a href="/2020/02/29/iOS性能优化03-卡顿优化01-CPU/">iOS性能优化03-卡顿优化01-CPU</a>
       </li>
     
       <li>
-        <a href="/2020/02/27/性能优化01-CPU和GPU/">iOS性能优化01-CPU和GPU</a>
+        <a href="/2020/02/27/iOS性能优化01-CPU和GPU/">iOS性能优化01-CPU和GPU</a>
+      </li>
+    
+      <li>
+        <a href="/2020/02/27/iOS性能优化02-卡顿产生的原因/">iOS性能优化02-产生卡顿的原因</a>
       </li>
     
       <li>
