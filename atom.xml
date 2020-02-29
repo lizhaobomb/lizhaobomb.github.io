@@ -2,6 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
   <title>Hexo</title>
   
+  
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://yoursite.com/"/>
@@ -13,108 +14,16 @@
     
   </author>
   
-  <generator uri="http://hexo.io/">Hexo</generator>
+  <generator uri="https://hexo.io/">Hexo</generator>
   
   <entry>
     <title>iOS性能优化03-卡顿优化01-CPU</title>
     <link href="http://yoursite.com/2020/02/29/iOS%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%9603-%E5%8D%A1%E9%A1%BF%E4%BC%98%E5%8C%9601-CPU/"/>
-    <id>http://yoursite.com/2020/02/29/iOS性能优化03-卡顿优化01-CPU/</id>
+    <id>http://yoursite.com/2020/02/29/iOS%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%9603-%E5%8D%A1%E9%A1%BF%E4%BC%98%E5%8C%9601-CPU/</id>
     <published>2020-02-28T16:20:47.000Z</published>
     <updated>2020-02-28T16:56:03.275Z</updated>
     
-    <content type="html"><![CDATA[<ul>
-<li><p>尽量使用轻量级的对象，比如用不到事件处理的地方，可以考虑使用CALayer取代UIView</p>
-</li>
-<li><p>不要频繁的调用UIView的相关属性，比如frame、bounds、transform等属性，尽量减少不必要的修改</p>
-</li>
-<li><p>尽量提前计算好布局，在有需要时一次性调整对应的属性，不要多次修改属性</p>
-</li>
-<li><p>Autolayout会比直接设置frame消耗更多的CPU资源</p>
-</li>
-<li><p>图片的size,最好刚好跟UIImageView的size保持一致</p>
-</li>
-<li><p>控制一下线程的最大并发数量</p>
-</li>
-<li><p>尽量把耗时的操作放到子线程里(比如<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">- 文本处理 (尺寸计算、绘制）</div></pre></td></tr></table></figure></p>
-<p>  // 文字计算<br>  [@”text” boundingRectWithSize:CGSizeMake(100, MAXFLOAT)     options:NSStringDrawingUsesLineFragmentOrigin attributes:nil context:nil];  </p>
-<pre><code><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"> </div></pre></td></tr></table></figure>
-
-// 文字绘制
-</code></pre><p>  [@”text” drawWithRect:CGRectMake(0, 0, 100, 100)     options:NSStringDrawingUsesLineFragmentOrigin attributes:nil context:nil];<br>  ```</p>
-</li>
-</ul>
-<pre><code>- 图片处理（解码、绘制）
-
-我们一般都会用```imageView.image = [UIImage imageNamed:@&quot;***&quot;];```这种方式来获取图片，但这种方式是系统负责解码，而系统解码默认又是在主线程所以如果你的图片数据很大的时候就可能阻塞主线程从而造成卡顿，所以我们一般都是提前解码并且在子线程里进行，这样主线程就少了解码的操作到时候直接把解码的图片数据拿来用就好了，其实我们现在用的一些第三方图片处理库都有异步解码的功能了，我们来看一个例子（也是从三方库里拷贝过来的）代码有点多，其实核心步骤就是：
-
- 1.获取到图片的CGImage
-
-2.解码（解码的步骤就是）
-
-- 2.1 创建位图上下文
-
-- 2.2 把cgImage draw到上下文里，这样就完成了解码操作
-
-3.从上下文里获取刚解码过的图片
-
-4.最好再把解码过的图片包装成UIImage
-
-5.回到主线程的时候我们直接用解码过的图片就OK了（这样解码的操作都是在子线程里做的并不会阻塞主线程）
-</code></pre><p>下面我们来看看具体的代码实现    </p>
-<pre><code>- (void)image
-{
-    UIImageView *imageView = [[UIImageView alloc] init];
-    imageView.frame = CGRectMake(100, 100, 100, 56);
-    [self.view addSubview:imageView];
-    self.imageView = imageView;
-
-    dispatch_async(dispatch_get_global_queue(0, 0), ^{
-        // 获取CGImage
-        CGImageRef cgImage = [UIImage imageNamed:@&quot;***&quot;].CGImage;
-
-        // alphaInfo
-        CGImageAlphaInfo alphaInfo = CGImageGetAlphaInfo(cgImage) &amp; kCGBitmapAlphaInfoMask;
-        BOOL hasAlpha = NO;
-        if (alphaInfo == kCGImageAlphaPremultipliedLast ||
-            alphaInfo == kCGImageAlphaPremultipliedFirst ||
-            alphaInfo == kCGImageAlphaLast ||
-            alphaInfo == kCGImageAlphaFirst) {
-            hasAlpha = YES;
-        }
-
-        // bitmapInfo
-        CGBitmapInfo bitmapInfo = kCGBitmapByteOrder32Host;
-        bitmapInfo |= hasAlpha ? kCGImageAlphaPremultipliedFirst : kCGImageAlphaNoneSkipFirst;
-
-        // size
-        size_t width = CGImageGetWidth(cgImage);
-        size_t height = CGImageGetHeight(cgImage);
-
-        // context
-        CGContextRef context = CGBitmapContextCreate(NULL, width, height, 8, 0, CGColorSpaceCreateDeviceRGB(), bitmapInfo);
-
-        // draw
-        CGContextDrawImage(context, CGRectMake(0, 0, width, height), cgImage);
-
-        // get CGImage
-        cgImage = CGBitmapContextCreateImage(context);
-
-        // into UIImage
-        UIImage *newImage = [UIImage imageWithCGImage:cgImage];
-
-        // release
-        CGContextRelease(context);
-        CGImageRelease(cgImage);
-
-        // back to the main thread
-        dispatch_async(dispatch_get_main_queue(), ^{
-            self.imageView.image = newImage;
-        });
-    });
-}
-</code></pre><p>喜欢的朋友可以扫描关注我的公众号(多谢支持）</p>
-<p><img src="https://img.rruu.net/image/5e57d1ec32781" alt=""></p>
-]]></content>
+    <content type="html"><![CDATA[<ul><li><p>尽量使用轻量级的对象，比如用不到事件处理的地方，可以考虑使用CALayer取代UIView</p></li><li><p>不要频繁的调用UIView的相关属性，比如frame、bounds、transform等属性，尽量减少不必要的修改</p></li><li><p>尽量提前计算好布局，在有需要时一次性调整对应的属性，不要多次修改属性</p></li><li><p>Autolayout会比直接设置frame消耗更多的CPU资源</p></li><li><p>图片的size,最好刚好跟UIImageView的size保持一致</p></li><li><p>控制一下线程的最大并发数量</p></li><li><p>尽量把耗时的操作放到子线程里(比如<code>文本处理</code>和<code>图片处理</code>)</p><ul><li><p>文本处理 (尺寸计算、绘制）</p><div class="code-area-wrap"><div class="highlight-tools"><i class="fa fa-angle-down code-expand" aria-hidden="true"></i><div class="code_lang">Code</div><div class="copy-notice"></div><i class="fa fa-clipboard" aria-hidden="true"></i></div><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">&#x2F;&#x2F; 文字计算</span><br><span class="line">   [@&quot;text&quot; boundingRectWithSize:CGSizeMake(100, MAXFLOAT) options:NSStringDrawingUsesLineFragmentOrigin attributes:nil context:nil];</span><br></pre></td></tr></table></figure></div><div class="code-area-wrap"><div class="highlight-tools"><i class="fa fa-angle-down code-expand" aria-hidden="true"></i><div class="code_lang">Code</div><div class="copy-notice"></div><i class="fa fa-clipboard" aria-hidden="true"></i></div><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">&#x2F;&#x2F; 文字绘制</span><br><span class="line"> [@&quot;text&quot; drawWithRect:CGRectMake(0, 0, 100, 100) options:NSStringDrawingUsesLineFragmentOrigin attributes:nil context:nil];</span><br></pre></td></tr></table></figure></div></li></ul></li></ul><pre><code>- 图片处理（解码、绘制）我们一般都会用```imageView.image = [UIImage imageNamed:@&quot;***&quot;];```这种方式来获取图片，但这种方式是系统负责解码，而系统解码默认又是在主线程所以如果你的图片数据很大的时候就可能阻塞主线程从而造成卡顿，所以我们一般都是提前解码并且在子线程里进行，这样主线程就少了解码的操作到时候直接把解码的图片数据拿来用就好了，其实我们现在用的一些第三方图片处理库都有异步解码的功能了，我们来看一个例子（也是从三方库里拷贝过来的）代码有点多，其实核心步骤就是： 1.获取到图片的CGImage2.解码（解码的步骤就是）- 2.1 创建位图上下文- 2.2 把cgImage draw到上下文里，这样就完成了解码操作3.从上下文里获取刚解码过的图片4.最好再把解码过的图片包装成UIImage5.回到主线程的时候我们直接用解码过的图片就OK了（这样解码的操作都是在子线程里做的并不会阻塞主线程）</code></pre><p>下面我们来看看具体的代码实现    </p><pre><code>- (void)image{    UIImageView *imageView = [[UIImageView alloc] init];    imageView.frame = CGRectMake(100, 100, 100, 56);    [self.view addSubview:imageView];    self.imageView = imageView;    dispatch_async(dispatch_get_global_queue(0, 0), ^{        // 获取CGImage        CGImageRef cgImage = [UIImage imageNamed:@&quot;***&quot;].CGImage;        // alphaInfo        CGImageAlphaInfo alphaInfo = CGImageGetAlphaInfo(cgImage) &amp; kCGBitmapAlphaInfoMask;        BOOL hasAlpha = NO;        if (alphaInfo == kCGImageAlphaPremultipliedLast ||            alphaInfo == kCGImageAlphaPremultipliedFirst ||            alphaInfo == kCGImageAlphaLast ||            alphaInfo == kCGImageAlphaFirst) {            hasAlpha = YES;        }        // bitmapInfo        CGBitmapInfo bitmapInfo = kCGBitmapByteOrder32Host;        bitmapInfo |= hasAlpha ? kCGImageAlphaPremultipliedFirst : kCGImageAlphaNoneSkipFirst;        // size        size_t width = CGImageGetWidth(cgImage);        size_t height = CGImageGetHeight(cgImage);        // context        CGContextRef context = CGBitmapContextCreate(NULL, width, height, 8, 0, CGColorSpaceCreateDeviceRGB(), bitmapInfo);        // draw        CGContextDrawImage(context, CGRectMake(0, 0, width, height), cgImage);        // get CGImage        cgImage = CGBitmapContextCreateImage(context);        // into UIImage        UIImage *newImage = [UIImage imageWithCGImage:cgImage];        // release        CGContextRelease(context);        CGImageRelease(cgImage);        // back to the main thread        dispatch_async(dispatch_get_main_queue(), ^{            self.imageView.image = newImage;        });    });}</code></pre><p>喜欢的朋友可以扫描关注我的公众号(多谢支持）</p><p><a href="https://img.rruu.net/image/5e57d1ec32781" data-fancybox="group" data-caption="" class="fancybox"><img alt="" title="" data-src="https://img.rruu.net/image/5e57d1ec32781" class="lazyload"></a></p>]]></content>
     
     <summary type="html">
     
@@ -141,6 +50,7 @@
     </summary>
     
     
+    
       <category term="iOS" scheme="http://yoursite.com/tags/iOS/"/>
     
       <category term="性能优化" scheme="http://yoursite.com/tags/%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96/"/>
@@ -148,50 +58,40 @@
   </entry>
   
   <entry>
-    <title>iOS性能优化02-产生卡顿的原因</title>
-    <link href="http://yoursite.com/2020/02/27/iOS%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%9602-%E5%8D%A1%E9%A1%BF%E4%BA%A7%E7%94%9F%E7%9A%84%E5%8E%9F%E5%9B%A0/"/>
-    <id>http://yoursite.com/2020/02/27/iOS性能优化02-卡顿产生的原因/</id>
-    <published>2020-02-27T13:20:47.000Z</published>
-    <updated>2020-02-28T16:55:06.768Z</updated>
+    <title>iOS性能优化04-卡顿优化02-GPU</title>
+    <link href="http://yoursite.com/2020/02/29/iOS%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%9604-%E5%8D%A1%E9%A1%BF%E4%BC%98%E5%8C%9602-GPU/"/>
+    <id>http://yoursite.com/2020/02/29/iOS%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%9604-%E5%8D%A1%E9%A1%BF%E4%BC%98%E5%8C%9602-GPU/</id>
+    <published>2020-02-28T16:20:47.000Z</published>
+    <updated>2020-02-29T15:21:32.973Z</updated>
     
-    <content type="html"><![CDATA[<ul>
-<li>卡顿产生的主要原因CPU和GPU所花费的时间太长从而造成俗称的丢帧（掉帧）</li>
-</ul>
-<p>我们以下图为例，红色代表CPU，绿色代表GPU</p>
-<p><img src="https://img.rruu.net/image/5e57d298d000f" alt=""></p>
-<ol>
-<li><p>首先把CPU把计算好的数据交给GPU去渲染，紧接着来一个VSync（垂直同步信号）就会把刚CPU计算好并且GPU渲染好的数据展示到屏幕上完成这一帧的显示，注意一旦发生一个VSync就会把GPU渲染到帧缓存里的数据显示到屏幕上，并且开始下一帧的操作，</p>
-</li>
-<li><p>我们第二帧的操作GPU花费的时间比较短还留出一段空闲时间等VSync的到来然后显示到屏幕上，但也有一种情况就是：</p>
-</li>
-<li><p>我们第三帧的操作，CPU计算完数据交给GPU去渲染，然而由于这次的数据比较多当VSync到来时，发现GPU还没有渲染完，上面我们也说了VSync一旦到来就会把GPU渲染到帧缓存里的数据显示到屏幕上，但是GPU并没有渲染完，所以只能显示上一帧的数据，也就意味着当前这帧数据丢失了，俗称丢帧或掉帧，而当前帧只能等下次VSync到来时再显示，因此就会造成卡顿（本来要显示当前帧结果只能显示前一帧）</p>
-</li>
-</ol>
-<h1 id="卡顿解决的主要思路："><a href="#卡顿解决的主要思路：" class="headerlink" title="卡顿解决的主要思路："></a>卡顿解决的主要思路：</h1><ul>
-<li>尽可能减少CPU、GPU资源消耗</li>
-<li>一般我们要保证每秒60帧这样看起来就不会有什么问题了，那按照60FPS的刷帧率，每个16ms就会有一次VSync信号（为什么是16ms？因为1s=1000ms，1000ms/60~16ms）也就是说我们16ms内完成CPU和GPU操作就不会有什么卡顿问题了</li>
-</ul>
-<p>喜欢的朋友可以扫描关注我的公众号(多谢支持）</p>
-<p><img src="https://img.rruu.net/image/5e57d1ec32781" alt=""></p>
-]]></content>
+    <content type="html"><![CDATA[<ul><li><p>尽量减少视图数量和层次</p></li><li><p>尽量避免短时间内大量图片的显示，尽可能将多张图片合成一张进行显示</p></li><li><p>减少透明的视图（alpha&lt;1)，不透明的就设置opaque为YES</p></li><li><p>GPU能处理的最大纹理尺寸是4096*4096，一旦超过这个尺寸，就会占用CPU资源进行处理，所以纹理尽量不要超过这个尺寸</p></li><li><p>尽量避免出现离屏渲染</p></li></ul><h2 id="离屏渲染"><a href="#离屏渲染" class="headerlink" title="离屏渲染"></a>离屏渲染</h2><ul><li><p>在OpenGL中，GPU有2种渲染模式</p><ul><li>On-Screen Rendering：当前屏幕渲染，在当前用于显示的屏幕缓冲区进行渲染操作</li><li>Off-Screen Rendering：离屏渲染，在当前屏幕缓冲区以外新开辟一个缓冲区进行渲染操作</li></ul></li><li><p>离屏渲染消耗性能的原因</p><ul><li>需要创建新的缓冲区</li><li>离屏渲染的整个过程，需要多次切换上下文环境，先是从当前屏幕（On-Screen)切换到离屏（Off-Screen)，等到离屏渲染结束后，将离屏缓冲区的渲染结果显示到屏幕上，又需要将上下文环境从离屏切换到当前屏幕</li></ul></li><li><p>哪些操作会触发离屏渲染？</p><ul><li>光栅化，layer.shouldRasterize = YES</li><li>遮罩，layer.mask</li><li>圆角，同时设置layer.maskToBounds = YES、layer.cornerRadius 大于0（考虑通过CoreGraphics绘制裁剪圆角，这个网上例子有很多我就不多说了，大家随便搜一搜都可以搜到，或者叫美工直接提供圆角图片）</li><li>阴影， layer.shadowXXX (但是如果设置了layer.shadowPath就不会产生离屏渲染了，不设置默认是环绕layer添加的)</li></ul></li></ul><p>喜欢的朋友可以扫描关注我的公众号(多谢支持）</p><p><a href="https://img.rruu.net/image/5e57d1ec32781" data-fancybox="group" data-caption="" class="fancybox"><img alt="" title="" data-src="https://img.rruu.net/image/5e57d1ec32781" class="lazyload"></a></p>]]></content>
     
     <summary type="html">
     
-      * 卡顿产生的主要原因CPU和GPU所花费的时间太长从而造成俗称的丢帧（掉帧）
+      * 尽量减少视图数量和层次
+   
+   
+ * 尽量避免短时间内大量图片的显示，尽可能将多张图片合成一张进行显示
+   
+   
+ * 减少透明的视图（alpha&lt;1)，不透明的就设置opaque为YES
+   
+   
+ * GPU能处理的最大纹理尺寸是4096*4096，一旦超过这个尺寸，就会占用CPU资源进行处理，所以纹理尽量不要超过这个尺寸
+   
+   
+ * 尽量避免出现离屏渲染
+   
+   
 
-我们以下图为例，红色代表CPU，绿色代表GPU
-
-
-
- 1. 首先把CPU把计算好的数据交给GPU去渲染，紧接着来一个VSync（垂直同步信号）就会把刚CPU计算好并且GPU渲染好的数据展示到屏幕上完成这一帧的显示，注意一旦发生一个VSync就会把GPU渲染到帧缓存里的数据显示到屏幕上，并且开始下一帧的操作，
-    
-    
- 2. 我们第二帧的操作GPU花费的时间比较短还留出一段空闲时间等VSync的到来然后显示到屏幕上，但也有一种情况就是：
-    
-    
- 3. 我们第三帧的操作，CPU计算完数据交
+离屏渲染
+ * 在OpenGL中，GPU有2种渲染模式
+   
+    * On-Screen Rendering：当前屏幕渲染，在当前用于显示的屏幕缓冲区进行渲染操作
+    * O
     
     </summary>
+    
     
     
       <category term="iOS" scheme="http://yoursite.com/tags/iOS/"/>
@@ -203,30 +103,11 @@
   <entry>
     <title>iOS性能优化01-CPU和GPU</title>
     <link href="http://yoursite.com/2020/02/27/iOS%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%9601-CPU%E5%92%8CGPU/"/>
-    <id>http://yoursite.com/2020/02/27/iOS性能优化01-CPU和GPU/</id>
+    <id>http://yoursite.com/2020/02/27/iOS%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%9601-CPU%E5%92%8CGPU/</id>
     <published>2020-02-27T13:20:47.000Z</published>
     <updated>2020-02-28T16:54:53.479Z</updated>
     
-    <content type="html"><![CDATA[<h2 id="在屏幕成像的过程中-CPU和GPU起着至关重要的作用"><a href="#在屏幕成像的过程中-CPU和GPU起着至关重要的作用" class="headerlink" title="在屏幕成像的过程中,CPU和GPU起着至关重要的作用"></a>在屏幕成像的过程中,CPU和GPU起着至关重要的作用</h2><ul>
-<li><p>CPU(Centeral Processing Unit，中央处理器)<br>对象的创建和销毁，对象属性的调整，布局计算，文本的计算和排版，图片的格式转换和解码、图像的绘制（Core Graphics）</p>
-</li>
-<li><p>GPU（Graphics Processing Unit，图形处理器）<br>纹理的渲染</p>
-</li>
-<li><p>CPU 和 GPU 工作原理</p>
-<p>  CPU –计算–&gt;GPU–渲染–&gt;帧缓存–读取–&gt;视频控制器–显示–&gt;屏幕</p>
-</li>
-</ul>
-<ul>
-<li>iOS中是双缓存机制，有前帧缓存，后帧缓存</li>
-</ul>
-<h1 id="屏幕成像原理"><a href="#屏幕成像原理" class="headerlink" title="屏幕成像原理"></a>屏幕成像原理</h1><p>垂直同步信号（VSync）水平同步信号（HSync）</p>
-<p>屏幕要显示一帧画面之前首先会发送一个VSync，紧接着就是一行一行的HSync，当<br>发送最后一行HSync的时候，就会接着发送下一个VSync，这样周而复始就是我们看到的屏幕画面了</p>
-<p>VSync</p>
-<p>|—————-&gt;  HSync</p>
-<p>|—————-&gt;</p>
-<p>|—————-&gt;</p>
-<p>|—————-&gt;</p>
-]]></content>
+    <content type="html"><![CDATA[<h2 id="在屏幕成像的过程中-CPU和GPU起着至关重要的作用"><a href="#在屏幕成像的过程中-CPU和GPU起着至关重要的作用" class="headerlink" title="在屏幕成像的过程中,CPU和GPU起着至关重要的作用"></a>在屏幕成像的过程中,CPU和GPU起着至关重要的作用</h2><ul><li><p>CPU(Centeral Processing Unit，中央处理器)<br>对象的创建和销毁，对象属性的调整，布局计算，文本的计算和排版，图片的格式转换和解码、图像的绘制（Core Graphics）</p></li><li><p>GPU（Graphics Processing Unit，图形处理器）<br>纹理的渲染</p></li><li><p>CPU 和 GPU 工作原理</p><p>  CPU –计算–&gt;GPU–渲染–&gt;帧缓存–读取–&gt;视频控制器–显示–&gt;屏幕</p></li></ul><ul><li>iOS中是双缓存机制，有前帧缓存，后帧缓存</li></ul><h1 id="屏幕成像原理"><a href="#屏幕成像原理" class="headerlink" title="屏幕成像原理"></a>屏幕成像原理</h1><p>垂直同步信号（VSync）水平同步信号（HSync）</p><p>屏幕要显示一帧画面之前首先会发送一个VSync，紧接着就是一行一行的HSync，当<br>发送最后一行HSync的时候，就会接着发送下一个VSync，这样周而复始就是我们看到的屏幕画面了</p><p>VSync</p><p>|—————-&gt;  HSync</p><p>|—————-&gt;</p><p>|—————-&gt;</p><p>|—————-&gt;</p>]]></content>
     
     <summary type="html">
     
@@ -252,6 +133,42 @@
     </summary>
     
     
+    
+      <category term="iOS" scheme="http://yoursite.com/tags/iOS/"/>
+    
+      <category term="性能优化" scheme="http://yoursite.com/tags/%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>iOS性能优化02-产生卡顿的原因</title>
+    <link href="http://yoursite.com/2020/02/27/iOS%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%9602-%E5%8D%A1%E9%A1%BF%E4%BA%A7%E7%94%9F%E7%9A%84%E5%8E%9F%E5%9B%A0/"/>
+    <id>http://yoursite.com/2020/02/27/iOS%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%9602-%E5%8D%A1%E9%A1%BF%E4%BA%A7%E7%94%9F%E7%9A%84%E5%8E%9F%E5%9B%A0/</id>
+    <published>2020-02-27T13:20:47.000Z</published>
+    <updated>2020-02-28T16:55:06.768Z</updated>
+    
+    <content type="html"><![CDATA[<ul><li>卡顿产生的主要原因CPU和GPU所花费的时间太长从而造成俗称的丢帧（掉帧）</li></ul><p>我们以下图为例，红色代表CPU，绿色代表GPU</p><p><a href="https://img.rruu.net/image/5e57d298d000f" data-fancybox="group" data-caption="" class="fancybox"><img alt="" title="" data-src="https://img.rruu.net/image/5e57d298d000f" class="lazyload"></a></p><ol><li><p>首先把CPU把计算好的数据交给GPU去渲染，紧接着来一个VSync（垂直同步信号）就会把刚CPU计算好并且GPU渲染好的数据展示到屏幕上完成这一帧的显示，注意一旦发生一个VSync就会把GPU渲染到帧缓存里的数据显示到屏幕上，并且开始下一帧的操作，</p></li><li><p>我们第二帧的操作GPU花费的时间比较短还留出一段空闲时间等VSync的到来然后显示到屏幕上，但也有一种情况就是：</p></li><li><p>我们第三帧的操作，CPU计算完数据交给GPU去渲染，然而由于这次的数据比较多当VSync到来时，发现GPU还没有渲染完，上面我们也说了VSync一旦到来就会把GPU渲染到帧缓存里的数据显示到屏幕上，但是GPU并没有渲染完，所以只能显示上一帧的数据，也就意味着当前这帧数据丢失了，俗称丢帧或掉帧，而当前帧只能等下次VSync到来时再显示，因此就会造成卡顿（本来要显示当前帧结果只能显示前一帧）</p></li></ol><h1 id="卡顿解决的主要思路："><a href="#卡顿解决的主要思路：" class="headerlink" title="卡顿解决的主要思路："></a>卡顿解决的主要思路：</h1><ul><li>尽可能减少CPU、GPU资源消耗</li><li>一般我们要保证每秒60帧这样看起来就不会有什么问题了，那按照60FPS的刷帧率，每个16ms就会有一次VSync信号（为什么是16ms？因为1s=1000ms，1000ms/60~16ms）也就是说我们16ms内完成CPU和GPU操作就不会有什么卡顿问题了</li></ul><p>喜欢的朋友可以扫描关注我的公众号(多谢支持）</p><p><a href="https://img.rruu.net/image/5e57d1ec32781" data-fancybox="group" data-caption="" class="fancybox"><img alt="" title="" data-src="https://img.rruu.net/image/5e57d1ec32781" class="lazyload"></a></p>]]></content>
+    
+    <summary type="html">
+    
+      * 卡顿产生的主要原因CPU和GPU所花费的时间太长从而造成俗称的丢帧（掉帧）
+
+我们以下图为例，红色代表CPU，绿色代表GPU
+
+
+
+ 1. 首先把CPU把计算好的数据交给GPU去渲染，紧接着来一个VSync（垂直同步信号）就会把刚CPU计算好并且GPU渲染好的数据展示到屏幕上完成这一帧的显示，注意一旦发生一个VSync就会把GPU渲染到帧缓存里的数据显示到屏幕上，并且开始下一帧的操作，
+    
+    
+ 2. 我们第二帧的操作GPU花费的时间比较短还留出一段空闲时间等VSync的到来然后显示到屏幕上，但也有一种情况就是：
+    
+    
+ 3. 我们第三帧的操作，CPU计算完数据交
+    
+    </summary>
+    
+    
+    
       <category term="iOS" scheme="http://yoursite.com/tags/iOS/"/>
     
       <category term="性能优化" scheme="http://yoursite.com/tags/%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96/"/>
@@ -261,19 +178,11 @@
   <entry>
     <title>宏和const的区别</title>
     <link href="http://yoursite.com/2016/11/02/%E5%AE%8F%E5%92%8Cconst%E7%9A%84%E5%8C%BA%E5%88%AB/"/>
-    <id>http://yoursite.com/2016/11/02/宏和const的区别/</id>
+    <id>http://yoursite.com/2016/11/02/%E5%AE%8F%E5%92%8Cconst%E7%9A%84%E5%8C%BA%E5%88%AB/</id>
     <published>2016-11-02T13:20:47.000Z</published>
     <updated>2020-02-27T15:21:55.213Z</updated>
     
-    <content type="html"><![CDATA[<p>1、编译的时刻不一样<br>2、</p>
-<p>const的简单实用</p>
-<p>const作用：1.修饰右边基本变量或者指针变量 int a int *p<br>          2.被const修饰变量只读</p>
-<p>int <em> const p;     //p只读，</em>p可以改    </p>
-<p>int const <em> p;    //</em>p只读， p可以改</p>
-<p>const int <em>p;     // </em>p只读，p变量</p>
-<p>const int *const p;     //都是只读</p>
-<p>int const *const p;    //都是只读</p>
-]]></content>
+    <content type="html"><![CDATA[<p>1、编译的时刻不一样<br>2、</p><p>const的简单实用</p><p>const作用：1.修饰右边基本变量或者指针变量 int a int *p<br>          2.被const修饰变量只读</p><p>int * const p;     //p只读，*p可以改    </p><p>int const * p;    //*p只读， p可以改</p><p>const int *p;     // *p只读，p变量</p><p>const int *const p;     //都是只读</p><p>int const *const p;    //都是只读</p>]]></content>
     
     <summary type="html">
     
@@ -285,17 +194,18 @@ const的简单实用
 const作用：1.修饰右边基本变量或者指针变量 int a int *p
 2.被const修饰变量只读
 
-int const p; //p只读，p可以改 
+int * const p; //p只读，*p可以改 
 
-int const p; //p只读， p可以改
+int const * p; //*p只读， p可以改
 
-const int p; // p只读，p变量
+const int *p; // *p只读，p变量
 
 const int *const p; //都是只读
 
 int const *const p; //都是只读
     
     </summary>
+    
     
     
       <category term="宏" scheme="http://yoursite.com/tags/%E5%AE%8F/"/>
@@ -311,16 +221,7 @@ int const *const p; //都是只读
     <published>2016-10-08T14:35:23.000Z</published>
     <updated>2016-10-08T14:35:23.000Z</updated>
     
-    <content type="html"><![CDATA[<p>Welcome to <a href="https://hexo.io/" target="_blank" rel="external">Hexo</a>! This is your very first post. Check <a href="https://hexo.io/docs/" target="_blank" rel="external">documentation</a> for more info. If you get any problems when using Hexo, you can find the answer in <a href="https://hexo.io/docs/troubleshooting.html" target="_blank" rel="external">troubleshooting</a> or you can ask me on <a href="https://github.com/hexojs/hexo/issues" target="_blank" rel="external">GitHub</a>.</p>
-<h2 id="Quick-Start"><a href="#Quick-Start" class="headerlink" title="Quick Start"></a>Quick Start</h2><h3 id="Create-a-new-post"><a href="#Create-a-new-post" class="headerlink" title="Create a new post"></a>Create a new post</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ hexo new <span class="string">"My New Post"</span></div></pre></td></tr></table></figure>
-<p>More info: <a href="https://hexo.io/docs/writing.html" target="_blank" rel="external">Writing</a></p>
-<h3 id="Run-server"><a href="#Run-server" class="headerlink" title="Run server"></a>Run server</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ hexo server</div></pre></td></tr></table></figure>
-<p>More info: <a href="https://hexo.io/docs/server.html" target="_blank" rel="external">Server</a></p>
-<h3 id="Generate-static-files"><a href="#Generate-static-files" class="headerlink" title="Generate static files"></a>Generate static files</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ hexo generate</div></pre></td></tr></table></figure>
-<p>More info: <a href="https://hexo.io/docs/generating.html" target="_blank" rel="external">Generating</a></p>
-<h3 id="Deploy-to-remote-sites"><a href="#Deploy-to-remote-sites" class="headerlink" title="Deploy to remote sites"></a>Deploy to remote sites</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ hexo deploy</div></pre></td></tr></table></figure>
-<p>More info: <a href="https://hexo.io/docs/deployment.html" target="_blank" rel="external">Deployment</a></p>
-]]></content>
+    <content type="html"><![CDATA[<p>Welcome to <a href="https://hexo.io/" target="_blank" rel="noopener">Hexo</a>! This is your very first post. Check <a href="https://hexo.io/docs/" target="_blank" rel="noopener">documentation</a> for more info. If you get any problems when using Hexo, you can find the answer in <a href="https://hexo.io/docs/troubleshooting.html" target="_blank" rel="noopener">troubleshooting</a> or you can ask me on <a href="https://github.com/hexojs/hexo/issues" target="_blank" rel="noopener">GitHub</a>.</p><h2 id="Quick-Start"><a href="#Quick-Start" class="headerlink" title="Quick Start"></a>Quick Start</h2><h3 id="Create-a-new-post"><a href="#Create-a-new-post" class="headerlink" title="Create a new post"></a>Create a new post</h3><div class="code-area-wrap"><div class="highlight-tools"><i class="fa fa-angle-down code-expand" aria-hidden="true"></i><div class="code_lang">bash</div><div class="copy-notice"></div><i class="fa fa-clipboard" aria-hidden="true"></i></div><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo new <span class="string">"My New Post"</span></span><br></pre></td></tr></table></figure></div><p>More info: <a href="https://hexo.io/docs/writing.html" target="_blank" rel="noopener">Writing</a></p><h3 id="Run-server"><a href="#Run-server" class="headerlink" title="Run server"></a>Run server</h3><div class="code-area-wrap"><div class="highlight-tools"><i class="fa fa-angle-down code-expand" aria-hidden="true"></i><div class="code_lang">bash</div><div class="copy-notice"></div><i class="fa fa-clipboard" aria-hidden="true"></i></div><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo server</span><br></pre></td></tr></table></figure></div><p>More info: <a href="https://hexo.io/docs/server.html" target="_blank" rel="noopener">Server</a></p><h3 id="Generate-static-files"><a href="#Generate-static-files" class="headerlink" title="Generate static files"></a>Generate static files</h3><div class="code-area-wrap"><div class="highlight-tools"><i class="fa fa-angle-down code-expand" aria-hidden="true"></i><div class="code_lang">bash</div><div class="copy-notice"></div><i class="fa fa-clipboard" aria-hidden="true"></i></div><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo generate</span><br></pre></td></tr></table></figure></div><p>More info: <a href="https://hexo.io/docs/generating.html" target="_blank" rel="noopener">Generating</a></p><h3 id="Deploy-to-remote-sites"><a href="#Deploy-to-remote-sites" class="headerlink" title="Deploy to remote sites"></a>Deploy to remote sites</h3><div class="code-area-wrap"><div class="highlight-tools"><i class="fa fa-angle-down code-expand" aria-hidden="true"></i><div class="code_lang">bash</div><div class="copy-notice"></div><i class="fa fa-clipboard" aria-hidden="true"></i></div><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo deploy</span><br></pre></td></tr></table></figure></div><p>More info: <a href="https://hexo.io/docs/deployment.html" target="_blank" rel="noopener">Deployment</a></p>]]></content>
     
     <summary type="html">
     
@@ -330,16 +231,20 @@ Quick Start
 Create a new post
 1
 
+
 $ hexo new &quot;My New Post&quot;
+
 
 More info: Writing
 
 Run server
 1
 
-$ hexo serv
+
+$ hexo s
     
     </summary>
+    
     
     
   </entry>

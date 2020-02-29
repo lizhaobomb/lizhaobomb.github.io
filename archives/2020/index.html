@@ -1,77 +1,73 @@
-<!DOCTYPE html><html><head><meta charset="UTF-8"><title></title><meta name="viewport" content="width=device-width, initial-scale=1"><link rel="stylesheet" href="/./css/style.css"></head><body><header class="al_header al_pos_fixed"><div class="al_header_container dis_flex_jcenter"><div class="al_header_container_left"><div class="al_header_site_title"><a href="/">Hexo</a></div></div><div class="dis_flex_jcenter"><div class="al_header_setting"><svg class="al_header_icon"><use xmlns="http://www.w3.org/2000/svg" xlink:href="/assets/svg_icons.svg#svg-menu"></use></svg></div></div></div></header><div class="al_sidebar"><div class="al_sidebar_overlay al_full_cover"></div><div class="al_pos_fixed al_sidebar_cnt"><div class="dis_flex_acenter al_sidebar_header"><h3>Hexo</h3><div class="al_sidebar_close al_header_setting"><svg class="al_header_icon"><use xmlns="http://www.w3.org/2000/svg" xlink:href="/assets/svg_icons.svg#svg-close"></use></svg></div></div><div class="al_sidebar_author_cnt"><div class="al_sidebar_author_info"><h4>John Doe</h4><img class="al_sidebar_avatar" src="https://cdn.iguan7u.cn/image/avatar.jpg"><p></p></div></div></div></div><div class="al_index_background dis_flex_center al_full_cover"><div class="al_pos_ab al_letter al_index_background_letter">A</div><h2 class="al_index_background_bio">A Beautiful Text Site.</h2></div><div class="al_index_container"><div class="al_pos_ab al_fake_background"></div><div class="al_main_container"><div class="al_section_container dis_flex_jcenter"><div class="section_header">LATEST PAGES</div></div><ur class="al_post_list"><li class="al_index_pageList_item al_index_page_seperator"><div class="al_index_post_title_cnt dis_flex"><div class="al_pos_ab al_letter al_index_post_title_letter">i</div><h2 class="al_index_post_title"><a href="/2020/02/29/iOS性能优化03-卡顿优化01-CPU/">iOS性能优化03-卡顿优化01-CPU</a></h2><div class="al_index_post_extra dis_flex"><div class="al_index_post_date al_index_post_extra_item">Feb 29</div><div class="al_index_post_read_time">2 Min Read</div></div></div><div class="al_index_post_excerpt_cnt"><p class="al_index_post_excerpt">* 尽量使用轻量级的对象，比如用不到事件处理的地方，可以考虑使用CALayer取代UIView
-   
-   
- * 不要频繁的调用UIView的相关属性，比如frame、bounds、transform等属性，尽量减少不必要的修改
-   
-   
- * 尽量提前计算好布局，在有需要时一次性调整对应的属性，不要多次修改属性
-   
-   
- * Autolayout会比直接设置frame消耗更多的CPU资源
-   
-   
- * 图片的size,最好刚好跟UIImageView的size保持一致
-   
-   
- * 控制一下线程的最大并发数量
-   
-   
- * 尽量把耗时的操作放到子线程...</p></div><div class="al_index_post_button_cnt dis_flex"><a class="al_button al_button_red al_index_post_button" href="/2020/02/29/iOS性能优化03-卡顿优化01-CPU/">READ ON</a><a class="al_button al_button_white al_index_post_button" href="https://getpocket.com/edit?url=http%3A%2F%2Fyoursite.com%2F%2F2020%2F02%2F29%2FiOS%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%9603-%E5%8D%A1%E9%A1%BF%E4%BC%98%E5%8C%9601-CPU%2F">READ LATER</a></div></li><li class="al_index_pageList_item al_index_page_seperator"><div class="al_index_post_title_cnt dis_flex"><div class="al_pos_ab al_letter al_index_post_title_letter">i</div><h2 class="al_index_post_title"><a href="/2020/02/27/iOS性能优化02-卡顿产生的原因/">iOS性能优化02-产生卡顿的原因</a></h2><div class="al_index_post_extra dis_flex"><div class="al_index_post_date al_index_post_extra_item">Feb 27</div><div class="al_index_post_read_time">1 Min Read</div></div></div><div class="al_index_post_excerpt_cnt"><p class="al_index_post_excerpt">* 卡顿产生的主要原因CPU和GPU所花费的时间太长从而造成俗称的丢帧（掉帧）
+<!DOCTYPE html><html data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5"><title>Archives: 2020 | Hexo</title><meta name="description"><meta name="author" content="John Doe"><meta name="copyright" content="John Doe"><meta name="format-detection" content="telephone=no"><link rel="shortcut icon" href="/img/favicon.ico"><link rel="preconnect" href="//cdn.jsdelivr.net"><link rel="preconnect" href="https://fonts.googleapis.com" crossorigin><link rel="preconnect" href="//busuanzi.ibruce.info"><meta name="twitter:card" content="summary"><meta name="twitter:title" content="Archives: 2020"><meta name="twitter:description"><meta name="twitter:image" content="http://yoursite.com/img/avatar.png"><meta property="og:type" content="website"><meta property="og:title" content="Archives: 2020"><meta property="og:url" content="http://yoursite.com/archives/2020/"><meta property="og:site_name" content="Hexo"><meta property="og:description"><meta property="og:image" content="http://yoursite.com/img/avatar.png"><meta http-equiv="Cache-Control" content="no-transform"><meta http-equiv="Cache-Control" content="no-siteapp"><script src="https://cdn.jsdelivr.net/npm/js-cookie/dist/js.cookie.min.js"></script><script>const autoChangeMode = 'false'
+var t = Cookies.get("theme");
+if (autoChangeMode == '1'){
+const isDarkMode = window.matchMedia("(prefers-color-scheme: dark)").matches
+const isLightMode = window.matchMedia("(prefers-color-scheme: light)").matches
+const isNotSpecified = window.matchMedia("(prefers-color-scheme: no-preference)").matches
+const hasNoSupport = !isDarkMode && !isLightMode && !isNotSpecified
 
-我们以下图为例，红色代表CPU，绿色代表GPU
-
+if (t === undefined){
+  if (isLightMode) activateLightMode()
+  else if (isDarkMode) activateDarkMode()
+  else if (isNotSpecified || hasNoSupport){
+    console.log('You specified no preference for a color scheme or your browser does not support it. I Schedule dark mode during night time.')
+    now = new Date();
+    hour = now.getHours();
+    isNight = hour < 6 || hour >= 18
+    isNight ? activateDarkMode() : activateLightMode()
+}
+} else if (t == 'light') activateLightMode()
+else activateDarkMode()
 
 
- 1. 首先把CPU把计算好的数据交给GPU去渲染，紧接着来一个VSync（垂直同步信号）就会把刚CPU计算好并且GPU渲染好的数据展示到屏幕上完成这一帧的显示，注意一旦发生一个VSync就会把GPU渲染到帧缓存里的数据显示到屏幕上，并且开始下一帧的操作，
-    
-    
- 2. 我们第二帧的操作GPU花费的时间比较短还留出一段空闲时间等VSync的到来然后显示到屏幕上，但也有一种情况就是：
-    
-    
- 3. 我们第三帧的操作，CPU计算完数据交...</p></div><div class="al_index_post_button_cnt dis_flex"><a class="al_button al_button_red al_index_post_button" href="/2020/02/27/iOS性能优化02-卡顿产生的原因/">READ ON</a><a class="al_button al_button_white al_index_post_button" href="https://getpocket.com/edit?url=http%3A%2F%2Fyoursite.com%2F%2F2020%2F02%2F27%2FiOS%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%9602-%E5%8D%A1%E9%A1%BF%E4%BA%A7%E7%94%9F%E7%9A%84%E5%8E%9F%E5%9B%A0%2F">READ LATER</a></div></li><li class="al_index_pageList_item al_index_page_seperator"><div class="al_index_post_title_cnt dis_flex"><div class="al_pos_ab al_letter al_index_post_title_letter">i</div><h2 class="al_index_post_title"><a href="/2020/02/27/iOS性能优化01-CPU和GPU/">iOS性能优化01-CPU和GPU</a></h2><div class="al_index_post_extra dis_flex"><div class="al_index_post_date al_index_post_extra_item">Feb 27</div><div class="al_index_post_read_time">1 Min Read</div></div></div><div class="al_index_post_excerpt_cnt"><p class="al_index_post_excerpt">在屏幕成像的过程中,CPU和GPU起着至关重要的作用
- * CPU(Centeral Processing Unit，中央处理器)
-   对象的创建和销毁，对象属性的调整，布局计算，文本的计算和排版，图片的格式转换和解码、图像的绘制（Core Graphics）
-   
-   
- * GPU（Graphics Processing Unit，图形处理器）
-   纹理的渲染
-   
-   
- * CPU 和 GPU 工作原理
-   
-    CPU –计算–&gt;GPU–渲染–&gt;帧缓存–读取–&gt;视频控制器–显示–&gt;屏幕
-   
-   
+} else if (autoChangeMode == '2'){
+  now = new Date();
+  hour = now.getHours();
+  isNight = hour < 6 || hour >= 18
+  if(t === undefined) isNight? activateDarkMode() : activateLightMode()
+  else if (t === 'light') activateLightMode()
+  else activateDarkMode() 
+} else {
+  if ( t == 'dark' ) activateDarkMode()
+  else if ( t == 'light') activateLightMode()
+}
 
- * iOS中是双缓存机制，有前帧缓存，后帧缓存
-
-屏幕成像原...</p></div><div class="al_index_post_button_cnt dis_flex"><a class="al_button al_button_red al_index_post_button" href="/2020/02/27/iOS性能优化01-CPU和GPU/">READ ON</a><a class="al_button al_button_white al_index_post_button" href="https://getpocket.com/edit?url=http%3A%2F%2Fyoursite.com%2F%2F2020%2F02%2F27%2FiOS%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%9601-CPU%E5%92%8CGPU%2F">READ LATER</a></div></li><li class="al_index_pageList_item al_index_page_seperator"><div class="al_index_post_title_cnt dis_flex"><div class="al_pos_ab al_letter al_index_post_title_letter">宏</div><h2 class="al_index_post_title"><a href="/2016/11/02/宏和const的区别/">宏和const的区别</a></h2><div class="al_index_post_extra dis_flex"><div class="al_index_post_date al_index_post_extra_item">Nov 02</div><div class="al_index_post_read_time">1 Min Read</div></div></div><div class="al_index_post_excerpt_cnt"><p class="al_index_post_excerpt">1、编译的时刻不一样
-2、
-
-const的简单实用
-
-const作用：1.修饰右边基本变量或者指针变量 int a int *p
-2.被const修饰变量只读
-
-int const p; //p只读，p可以改 
-
-int const p; //p只读， p可以改
-
-const int p; // p只读，p变量
-
-const int *const p; //都是只读
-
-int const *const p; //都是只读...</p></div><div class="al_index_post_button_cnt dis_flex"><a class="al_button al_button_red al_index_post_button" href="/2016/11/02/宏和const的区别/">READ ON</a><a class="al_button al_button_white al_index_post_button" href="https://getpocket.com/edit?url=http%3A%2F%2Fyoursite.com%2F%2F2016%2F11%2F02%2F%E5%AE%8F%E5%92%8Cconst%E7%9A%84%E5%8C%BA%E5%88%AB%2F">READ LATER</a></div></li><li class="al_index_pageList_item al_index_page_seperator"><div class="al_index_post_title_cnt dis_flex"><div class="al_pos_ab al_letter al_index_post_title_letter">H</div><h2 class="al_index_post_title"><a href="/2016/10/08/hello-world/">Hello World</a></h2><div class="al_index_post_extra dis_flex"><div class="al_index_post_date al_index_post_extra_item">Oct 08</div><div class="al_index_post_read_time">1 Min Read</div></div></div><div class="al_index_post_excerpt_cnt"><p class="al_index_post_excerpt">Welcome to Hexo! This is your very first post. Check documentation for more info. If you get any problems when using Hexo, you can find the answer in troubleshooting or you can ask me on GitHub.
-
-Quick Start
-Create a new post
-1
-
-$ hexo new &quot;My New Post&quot;
-
-More info: Writing
-
-Run server
-1
-
-$ hexo serv...</p></div><div class="al_index_post_button_cnt dis_flex"><a class="al_button al_button_red al_index_post_button" href="/2016/10/08/hello-world/">READ ON</a><a class="al_button al_button_white al_index_post_button" href="https://getpocket.com/edit?url=http%3A%2F%2Fyoursite.com%2F%2F2016%2F10%2F08%2Fhello-world%2F">READ LATER</a></div></li></ur><nav class="dis_flex post-nav"><span class="prev"></span><span class="next"></span></nav></div></div><div class="al_index_footer dis_flex dis_flex_center"><div class="al_index_footer_item al_index_footer_title">John Doe</div><div class="al_index_footer_item al_index_footer_extra">Create By <a href="https://github.com/iGuan7u/Acetolog">AcetoLog </a>· Power By <a href="https://hexo.io/">Hexo</a></div><div class="al_index_footer_item al_index_footer_extra_right">All Right Reserved</div></div><script type="text/javascript" async="async" src="/javascripts/acelog.js"></script></body></html>
+function activateDarkMode(){
+  document.documentElement.setAttribute('data-theme', 'dark')
+  if (document.querySelector('meta[name="theme-color"]') !== null){
+    document.querySelector('meta[name="theme-color"]').setAttribute('content','#000')
+  }
+}
+function activateLightMode(){
+  document.documentElement.setAttribute('data-theme', 'light')
+  if (document.querySelector('meta[name="theme-color"]') !== null){
+  document.querySelector('meta[name="theme-color"]').setAttribute('content','#fff')
+  }
+}</script><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/font-awesome@latest/css/font-awesome.min.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@latest/dist/jquery.fancybox.min.css"><link rel="canonical" href="http://yoursite.com/archives/2020/"><link rel="preload" href="https://cdn.jsdelivr.net/gh/jerryc127/butterfly_cdn@2.1.0/top_img/archive.jpg" as="image"><link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Titillium+Web"><script>var GLOBAL_CONFIG = { 
+  root: '/',
+  algolia: undefined,
+  localSearch: undefined,
+  translate: {"defaultEncoding":2,"translateDelay":0,"cookieDomain":"https://xxx/","msgToTraditionalChinese":"繁","msgToSimplifiedChinese":"简"},
+  copy: {
+    success: 'Copy successfully',
+    error: 'Copy error',
+    noSupport: 'The browser does not support'
+  },
+  bookmark: {
+    title: 'Snackbar.bookmark.title',
+    message_prev: 'Press',
+    message_next: 'to bookmark this page'
+  },
+  runtime_unit: 'days',
+  runtime: true,
+  copyright: undefined,
+  ClickShowText: undefined,
+  medium_zoom: false,
+  fancybox: true,
+  Snackbar: undefined,
+  baiduPush: false,
+  isHome: false,
+  isPost: false
+  
+}</script><meta name="generator" content="Hexo 4.2.0"><link rel="alternate" href="/atom.xml" title="Hexo" type="application/atom+xml">
+</head><body><header> <div id="page-header"><span class="pull_left" id="blog_name"><a class="blog_title" id="site-name" href="/">Hexo</a></span><span class="toggle-menu pull_right close"><a class="site-page"><i class="fa fa-bars fa-fw" aria-hidden="true"></i></a></span><span class="pull_right menus"><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fa fa-home"></i><span> Home</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fa fa-archive"></i><span> Archives</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fa fa-tags"></i><span> Tags</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fa fa-folder-open"></i><span> Categories</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fa fa-link"></i><span> Link</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fa fa-heart"></i><span> About</span></a></div><div class="menus_item"><a class="site-page"><i class="fa-fw fa fa-list" aria-hidden="true"></i><span> List</span><i class="fa fa-chevron-down menus-expand" aria-hidden="true"></i></a><ul class="menus_item_child"><li><a class="site-page" href="/music/"><i class="fa-fw fa fa-music"></i><span> Music</span></a></li><li><a class="site-page" href="/movies/"><i class="fa-fw fa fa-film"></i><span> Movie</span></a></li></ul></div></div></span></div></header><div id="mobile-sidebar"><div id="menu_mask"></div><div id="mobile-sidebar-menus"><div class="mobile_author_icon"><img class="avatar-img" src="/img/avatar.png" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"></div><div class="mobile_post_data"><div class="mobile_data_item is-center"><div class="mobile_data_link"><a href="/archives/"><div class="headline">Articles</div><div class="length_num">6</div></a></div></div><div class="mobile_data_item is-center">      <div class="mobile_data_link"><a href="/tags/"><div class="headline">Tags</div><div class="length_num">4</div></a></div></div></div><hr><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fa fa-home"></i><span> Home</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fa fa-archive"></i><span> Archives</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fa fa-tags"></i><span> Tags</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fa fa-folder-open"></i><span> Categories</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fa fa-link"></i><span> Link</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fa fa-heart"></i><span> About</span></a></div><div class="menus_item"><a class="site-page"><i class="fa-fw fa fa-list" aria-hidden="true"></i><span> List</span><i class="fa fa-chevron-down menus-expand" aria-hidden="true"></i></a><ul class="menus_item_child"><li><a class="site-page" href="/music/"><i class="fa-fw fa fa-music"></i><span> Music</span></a></li><li><a class="site-page" href="/movies/"><i class="fa-fw fa fa-film"></i><span> Movie</span></a></li></ul></div></div></div></div><div id="body-wrap"><nav class="not_index_bg" id="nav" style="background-image: url(https://cdn.jsdelivr.net/gh/jerryc127/butterfly_cdn@2.1.0/top_img/archive.jpg)"><div id="page_site-info"><div id="site-title"><span class="blogtitle">Archives</span></div></div></nav><main id="content-outer"><div class="layout_page" id="content-inner"><div id="archive"><div class="article-sort-title">Articles - 6</div><div class="article-sort"><div class="article-sort-item year">2020</div><div class="article-sort-item"><div class="article-sort-img"><a class="article-sort-item__img" href="/2020/02/29/iOS%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%9603-%E5%8D%A1%E9%A1%BF%E4%BC%98%E5%8C%9601-CPU/"><img src="https://cdn.jsdelivr.net/gh/jerryc127/butterfly_cdn@2.1.0/top_img/default.png" alt="iOS性能优化03-卡顿优化01-CPU"></a></div><div class="article-sort-post"><a class="article-sort-item__post" href="/2020/02/29/iOS%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%9603-%E5%8D%A1%E9%A1%BF%E4%BC%98%E5%8C%9601-CPU/"><i class="fa fa-clock-o" aria-hidden="true"></i><time class="article-sort-item__time">2020-02-29</time><div class="article-sort-item__title">iOS性能优化03-卡顿优化01-CPU</div></a></div></div><div class="article-sort-item"><div class="article-sort-img"><a class="article-sort-item__img" href="/2020/02/29/iOS%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%9604-%E5%8D%A1%E9%A1%BF%E4%BC%98%E5%8C%9602-GPU/"><img src="https://cdn.jsdelivr.net/gh/jerryc127/butterfly_cdn@2.1.0/top_img/default.png" alt="iOS性能优化04-卡顿优化02-GPU"></a></div><div class="article-sort-post"><a class="article-sort-item__post" href="/2020/02/29/iOS%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%9604-%E5%8D%A1%E9%A1%BF%E4%BC%98%E5%8C%9602-GPU/"><i class="fa fa-clock-o" aria-hidden="true"></i><time class="article-sort-item__time">2020-02-29</time><div class="article-sort-item__title">iOS性能优化04-卡顿优化02-GPU</div></a></div></div><div class="article-sort-item"><div class="article-sort-img"><a class="article-sort-item__img" href="/2020/02/27/iOS%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%9601-CPU%E5%92%8CGPU/"><img src="https://cdn.jsdelivr.net/gh/jerryc127/butterfly_cdn@2.1.0/top_img/default.png" alt="iOS性能优化01-CPU和GPU"></a></div><div class="article-sort-post"><a class="article-sort-item__post" href="/2020/02/27/iOS%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%9601-CPU%E5%92%8CGPU/"><i class="fa fa-clock-o" aria-hidden="true"></i><time class="article-sort-item__time">2020-02-27</time><div class="article-sort-item__title">iOS性能优化01-CPU和GPU</div></a></div></div><div class="article-sort-item"><div class="article-sort-img"><a class="article-sort-item__img" href="/2020/02/27/iOS%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%9602-%E5%8D%A1%E9%A1%BF%E4%BA%A7%E7%94%9F%E7%9A%84%E5%8E%9F%E5%9B%A0/"><img src="https://cdn.jsdelivr.net/gh/jerryc127/butterfly_cdn@2.1.0/top_img/default.png" alt="iOS性能优化02-产生卡顿的原因"></a></div><div class="article-sort-post"><a class="article-sort-item__post" href="/2020/02/27/iOS%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%9602-%E5%8D%A1%E9%A1%BF%E4%BA%A7%E7%94%9F%E7%9A%84%E5%8E%9F%E5%9B%A0/"><i class="fa fa-clock-o" aria-hidden="true"></i><time class="article-sort-item__time">2020-02-27</time><div class="article-sort-item__title">iOS性能优化02-产生卡顿的原因</div></a></div></div></div><nav id="pagination"><div class="pagination"><span class="page-number current">1</span></div></nav></div><div class="aside_content" id="aside_content"><div class="card-widget card-info"><div class="card-content"><div class="card-info-avatar is-center"><img class="avatar-img" src="/img/avatar.png" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"><div class="author-info__name">John Doe</div><div class="author-info__description"></div></div><div class="card-info-data"><div class="card-info-data-item is-center"><a href="/archives/"><div class="headline">Articles</div><div class="length_num">6</div></a></div><div class="card-info-data-item is-center">      <a href="/tags/"><div class="headline">Tags</div><div class="length_num">4</div></a></div></div><div class="card-info-bookmark is-center"><a class="bookmark button--primary button--animated" id="bookmark-it" href="javascript:;" title="Add to bookmark" target="_self"><i class="fa fa-bookmark" aria-hidden="true"></i><span>Add to bookmark</span></a></div><div class="card-info-social-icons is-center"><a class="social-icon" href="https://github.com/jerryc127" target="_blank"><i class="fa fa-github" aria-hidden="true"></i></a><a class="social-icon" href="mailto:xxxxxxxx@gmail.com" target="_blank"><i class="fa fa-envelope" aria-hidden="true"></i></a><a class="social-icon" href="/atom.xml" target="_blank"><i class="fa fa-rss" aria-hidden="true"></i></a></div></div></div><div class="card-widget card-announcement"><div class="card-content"><div class="item-headline"><i class="fa fa-bullhorn card-announcement-animation" aria-hidden="true"></i><span>Announcement</span></div><div class="announcement_content">感謝訪問本站，若喜歡請收藏 ^_^</div></div></div><div class="card-widget card-recent-post"><div class="card-content"><div class="item-headline"><i class="fa fa-history" aria-hidden="true"></i><span>Recent Post</span></div><div class="aside-recent-item"> <div class="aside-recent-post"><a href="/2020/02/29/iOS%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%9603-%E5%8D%A1%E9%A1%BF%E4%BC%98%E5%8C%9601-CPU/"><div class="aside-post-cover"><img class="aside-post-bg lazyload" data-src="https://cdn.jsdelivr.net/gh/jerryc127/butterfly_cdn@2.1.0/top_img/default.png" onerror="this.onerror=null;this.src='/img/404.jpg'" title="iOS性能优化03-卡顿优化01-CPU" alt="iOS性能优化03-卡顿优化01-CPU"></div><div class="aside-post-title"><div class="aside-post_title" href="/2020/02/29/iOS%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%9603-%E5%8D%A1%E9%A1%BF%E4%BC%98%E5%8C%9601-CPU/" title="iOS性能优化03-卡顿优化01-CPU">iOS性能优化03-卡顿优化01-CPU</div><time class="aside-post_meta post-meta__date">2020-02-29</time></div></a></div><div class="aside-recent-post"><a href="/2020/02/29/iOS%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%9604-%E5%8D%A1%E9%A1%BF%E4%BC%98%E5%8C%9602-GPU/"><div class="aside-post-cover"><img class="aside-post-bg lazyload" data-src="https://cdn.jsdelivr.net/gh/jerryc127/butterfly_cdn@2.1.0/top_img/default.png" onerror="this.onerror=null;this.src='/img/404.jpg'" title="iOS性能优化04-卡顿优化02-GPU" alt="iOS性能优化04-卡顿优化02-GPU"></div><div class="aside-post-title"><div class="aside-post_title" href="/2020/02/29/iOS%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%9604-%E5%8D%A1%E9%A1%BF%E4%BC%98%E5%8C%9602-GPU/" title="iOS性能优化04-卡顿优化02-GPU">iOS性能优化04-卡顿优化02-GPU</div><time class="aside-post_meta post-meta__date">2020-02-29</time></div></a></div><div class="aside-recent-post"><a href="/2020/02/27/iOS%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%9601-CPU%E5%92%8CGPU/"><div class="aside-post-cover"><img class="aside-post-bg lazyload" data-src="https://cdn.jsdelivr.net/gh/jerryc127/butterfly_cdn@2.1.0/top_img/default.png" onerror="this.onerror=null;this.src='/img/404.jpg'" title="iOS性能优化01-CPU和GPU" alt="iOS性能优化01-CPU和GPU"></div><div class="aside-post-title"><div class="aside-post_title" href="/2020/02/27/iOS%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%9601-CPU%E5%92%8CGPU/" title="iOS性能优化01-CPU和GPU">iOS性能优化01-CPU和GPU</div><time class="aside-post_meta post-meta__date">2020-02-27</time></div></a></div><div class="aside-recent-post"><a href="/2020/02/27/iOS%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%9602-%E5%8D%A1%E9%A1%BF%E4%BA%A7%E7%94%9F%E7%9A%84%E5%8E%9F%E5%9B%A0/"><div class="aside-post-cover"><img class="aside-post-bg lazyload" data-src="https://cdn.jsdelivr.net/gh/jerryc127/butterfly_cdn@2.1.0/top_img/default.png" onerror="this.onerror=null;this.src='/img/404.jpg'" title="iOS性能优化02-产生卡顿的原因" alt="iOS性能优化02-产生卡顿的原因"></div><div class="aside-post-title"><div class="aside-post_title" href="/2020/02/27/iOS%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%9602-%E5%8D%A1%E9%A1%BF%E4%BA%A7%E7%94%9F%E7%9A%84%E5%8E%9F%E5%9B%A0/" title="iOS性能优化02-产生卡顿的原因">iOS性能优化02-产生卡顿的原因</div><time class="aside-post_meta post-meta__date">2020-02-27</time></div></a></div><div class="aside-recent-post"><a href="/2016/11/02/%E5%AE%8F%E5%92%8Cconst%E7%9A%84%E5%8C%BA%E5%88%AB/"><div class="aside-post-cover"><img class="aside-post-bg lazyload" data-src="https://cdn.jsdelivr.net/gh/jerryc127/butterfly_cdn@2.1.0/top_img/default.png" onerror="this.onerror=null;this.src='/img/404.jpg'" title="宏和const的区别" alt="宏和const的区别"></div><div class="aside-post-title"><div class="aside-post_title" href="/2016/11/02/%E5%AE%8F%E5%92%8Cconst%E7%9A%84%E5%8C%BA%E5%88%AB/" title="宏和const的区别">宏和const的区别</div><time class="aside-post_meta post-meta__date">2016-11-02</time></div></a></div></div></div></div><div class="card-widget card-tags"><div class="card-content"><div class="item-headline"><i class="fa fa-tags" aria-hidden="true"></i><span>Tags</span></div><div class="card-tag-cloud"><a href="/tags/const/" style="font-size: 16px; color: #999">const</a> <a href="/tags/iOS/" style="font-size: 24px; color: #99a9bf">iOS</a> <a href="/tags/%E5%AE%8F/" style="font-size: 16px; color: #999">宏</a> <a href="/tags/%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96/" style="font-size: 24px; color: #99a9bf">性能优化</a></div></div></div><div class="card-widget card-archives"><div class="card-content"><div class="item-headline"><i class="fa fa-archive" aria-hidden="true"></i><span>Archives</span></div><ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/02/"><span class="archive-list-date">2020年02月</span><span class="archive-list-count">4</span></a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/11/"><span class="archive-list-date">2016年11月</span><span class="archive-list-count">1</span></a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/10/"><span class="archive-list-date">2016年10月</span><span class="archive-list-count">1</span></a></li></ul></div></div><div class="card-widget card-webinfo"><div class="card-content"><div class="item-headline"><i class="fa fa-line-chart" aria-hidden="true"></i><span>Info</span></div><div class="webinfo"><div class="webinfo-item"><div class="webinfo-article-name">Article :</div><div class="webinfo-article-count">6</div></div><div class="webinfo-item"><div class="webinfo-runtime-name">Run time :</div><div class="webinfo-runtime-count" id="webinfo-runtime-count" start_date="6/7/2018 00:00:00">     </div></div><div class="webinfo-item">      <div class="webinfo-site-uv-name">UV :</div><div class="webinfo-site-uv-count" id="busuanzi_value_site_uv"></div></div><div class="webinfo-item"><div class="webinfo-site-name">PV :</div><div class="webinfo-site-pv-count" id="busuanzi_value_site_pv"></div></div></div></div></div></div></div></main><footer id="footer" data-type="color"><div id="footer-wrap"><div class="copyright">&copy;2019 - 2020 By John Doe</div><div class="framework-info"><span>Driven </span><a href="http://hexo.io" target="_blank" rel="noopener"><span>Hexo</span></a><span class="footer-separator">|</span><span>Theme </span><a href="https://github.com/jerryc127/hexo-theme-butterfly" target="_blank" rel="noopener"><span>Butterfly</span></a></div></div></footer></div><section class="rightside" id="rightside"><div id="rightside-config-hide"><a class="translate_chn_to_cht" id="translateLink" href="javascript:translatePage();" title="Traditional Chinese and Simplified Chinese Conversion" target="_self">繁</a><i class="darkmode fa fa-moon-o" id="darkmode" title="Dark Mode"></i></div><div id="rightside-config-show"><div id="rightside_config" title="Setting"><i class="fa fa-cog" aria-hidden="true"></i></div><i class="fa fa-arrow-up" id="go-up" title="Back to top" aria-hidden="true"></i></div></section><script src="https://cdn.jsdelivr.net/npm/jquery@latest/dist/jquery.min.js"></script><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="/js/tw_cn.js"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@latest/dist/jquery.fancybox.min.js"></script><script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script><script src="https://cdn.jsdelivr.net/npm/instant.page@latest/instantpage.min.js" type="module"></script><script src="https://cdn.jsdelivr.net/npm/lazysizes@latest/lazysizes.min.js" async=""></script></body></html>
