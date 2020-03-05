@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="https://lizhaobomb.github.io/"/>
-  <updated>2020-03-04T15:28:26.522Z</updated>
+  <updated>2020-03-05T15:49:48.814Z</updated>
   <id>https://lizhaobomb.github.io/</id>
   
   <author>
@@ -15,6 +15,50 @@
   </author>
   
   <generator uri="https://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>iOS性能优化09-安装包瘦身</title>
+    <link href="https://lizhaobomb.github.io/2020/03/05/iOS%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%9609-%E5%AE%89%E8%A3%85%E5%8C%85%E7%98%A6%E8%BA%AB/"/>
+    <id>https://lizhaobomb.github.io/2020/03/05/iOS%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%9609-%E5%AE%89%E8%A3%85%E5%8C%85%E7%98%A6%E8%BA%AB/</id>
+    <published>2020-03-04T16:10:00.000Z</published>
+    <updated>2020-03-05T15:49:48.814Z</updated>
+    
+    <content type="html"><![CDATA[<p>我们开发完一个项目将来肯定是要进行编译，然后打包上传到APPStore提供给用户下载，那我们最终打包是什么格式呢？其实是一个IPA包，那首先我们来看看安装包的组成</p><h3 id="安装包（ipa）主要由可执行文件、资源组成"><a href="#安装包（ipa）主要由可执行文件、资源组成" class="headerlink" title="安装包（ipa）主要由可执行文件、资源组成"></a>安装包（<code>ipa</code>）主要由可执行文件、资源组成</h3><ul><li><p>资源（图片、音频、视频等）</p><ul><li><p>采取无损压缩:网上有很多，我常用的像 <a href="https://tinypng.com" target="_blank" rel="noopener">TinyPng</a>、<a href="https://squoosh.app/" target="_blank" rel="noopener">Squoosh</a>、<a href="https://www.tuhaokuai.com" target="_blank" rel="noopener">图好快</a> 等等</p></li><li><p>去除没用到的资源：大家可以试试GitHub上有个开源项目可以检测项目里没用的资源文件 <a href="https://github.com/tinymind/LSUnusedResources" target="_blank" rel="noopener">GitHub传送门</a></p></li></ul></li><li><p>可执行文件瘦身</p><ul><li><p>编译器优化 现在的新版<code>Xcode</code>已经自动给优化了，如果你的项目比较旧的话，可以去<code>XCode</code>设置这些选项，不确定的话最好都去搜下然后设置下 <code>Strip Linked Product</code>、<code>Make Strings Read-Only</code>、<code>Symbols Hidden by Default</code>设置为<code>YES</code><br><a href="https://ae01.alicdn.com/kf/Uc24885f572f84ceb87bc5e3f5812159bQ.jpg" data-fancybox="group" data-caption="" class="fancybox"><img alt="" title="" data-src="https://ae01.alicdn.com/kf/Uc24885f572f84ceb87bc5e3f5812159bQ.jpg" class="lazyload"></a></p></li><li><p>去掉异常支持，<code>Enable C++ Exceptions</code>、<code>Enable Objective-C Exceptions</code>设置为<code>NO</code>， <code>Other C Flags</code>添加<code>-fno-exceptions</code></p></li><li><p>利用<a href="https://www.jetbrains.com/objc/" target="_blank" rel="noopener">AppCode</a>（这个软件是收费的，可以试用30天，当然有钱的大家可以支持下正版，没钱的话想办法也可以搞到）检测未使用的代码：<code>菜单栏 -&gt; Code -&gt; Inspect Code</code></p></li><li><p>编写<code>LLVM</code>插件检测出重复代码、未被调用的代码（这个比较高级，也比较复杂，涉及到的知识有点多，后面会用专门一篇文章来记录）</p></li><li><p>还有个东西叫<code>LinkMap</code>(可以查看可执行文件的具体组成),我们可以用<code>Xcode</code>来生成<code>LinkMap</code>文件<br><a href="https://ae01.alicdn.com/kf/U84b8d327052040e5a89a485d63a7dc144.jpg" data-fancybox="group" data-caption="LinkMap" class="fancybox"><img alt="LinkMap" title="LinkMap" data-src="https://ae01.alicdn.com/kf/U84b8d327052040e5a89a485d63a7dc144.jpg" class="lazyload"></a><br>不过系统生成的这个txt文件可能看着比较难分析，那么我们可以借助三方工具来分析<code>LinkMap</code>文件，<code>GItHub</code>上有开源<code>Mac OS</code>项目，大家下载完编译完就可以用了</p></li></ul></li><li><p><a href="https://github.com/huanxsd/LinkMap" target="_blank" rel="noopener">解析LinkMap文件工具传送门</a></p></li></ul><p>解析前</p><div class="code-area-wrap"><div class="highlight-tools"><i class="fa fa-angle-down code-expand" aria-hidden="true"></i><div class="code_lang">Code</div><div class="copy-notice"></div><i class="fa fa-clipboard" aria-hidden="true"></i></div><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br></pre></td><td class="code"><pre><span class="line"># Sections:</span><br><span class="line"># AddressSize    SegmentSection</span><br><span class="line">0x100000F300x00000553__TEXT__text</span><br><span class="line">0x1000014840x0000003C__TEXT__stubs</span><br><span class="line">0x1000014C00x00000074__TEXT__stub_helper</span><br><span class="line">0x1000015340x00000D26__TEXT__objc_methname</span><br><span class="line">0x10000225A0x00000070__TEXT__objc_classname</span><br><span class="line">0x1000022CA0x00000ADA__TEXT__objc_methtype</span><br><span class="line">0x100002DA40x00000090__TEXT__cstring</span><br><span class="line">0x100002E340x0000017E__TEXT__entitlements</span><br><span class="line">0x100002FB40x00000048__TEXT__unwind_info</span><br><span class="line">0x1000030000x00000018__DATA_CONST__got</span><br><span class="line">0x1000030180x00000020__DATA_CONST__cfstring</span><br><span class="line">0x1000030380x00000018__DATA_CONST__objc_classlist</span><br><span class="line">0x1000030500x00000020__DATA_CONST__objc_protolist</span><br><span class="line">0x1000030700x00000008__DATA_CONST__objc_imageinfo</span><br><span class="line">0x1000040000x00000050__DATA__la_symbol_ptr</span><br><span class="line">0x1000040500x00001308__DATA__objc_const</span><br><span class="line">0x1000053580x00000018__DATA__objc_selrefs</span><br><span class="line">0x1000053700x00000010__DATA__objc_classrefs</span><br><span class="line">0x1000053800x00000008__DATA__objc_superrefs</span><br><span class="line">0x1000053880x00000008__DATA__objc_ivar</span><br><span class="line">0x1000053900x000000F0__DATA__objc_data</span><br><span class="line">0x1000054800x00000188__DATA__data</span><br><span class="line"># Symbols:</span><br><span class="line"># AddressSize    File  Name</span><br><span class="line">0x100000F300x00000039[  2] -[ViewController viewDidLoad]</span><br><span class="line">0x100000F700x00000080[  3] -[AppDelegate application:didFinishLaunchingWithOptions:]</span><br><span class="line">0x100000FF00x00000120[  3] -[AppDelegate application:configurationForConnectingSceneSession:options:]</span><br><span class="line">0x1000011100x0000006C[  3] -[AppDelegate application:didDiscardSceneSessions:]</span><br><span class="line">0x1000011800x00000090[  4] _main</span><br><span class="line">0x1000012100x000000A0[  5] -[SceneDelegate scene:willConnectToSession:options:]</span><br><span class="line">0x1000012B00x00000040[  5] -[SceneDelegate sceneDidDisconnect:]</span><br><span class="line">0x1000012F00x00000040[  5] -[SceneDelegate sceneDidBecomeActive:]</span><br><span class="line">0x1000013300x00000040[  5] -[SceneDelegate sceneWillResignActive:]</span><br><span class="line">0x1000013700x00000040[  5] -[SceneDelegate sceneWillEnterForeground:]</span><br><span class="line">0x1000013B00x00000040[  5] -[SceneDelegate sceneDidEnterBackground:]</span><br><span class="line">0x1000013F00x00000020[  5] -[SceneDelegate window]</span><br><span class="line">0x1000014100x00000040[  5] -[SceneDelegate setWindow:]</span><br><span class="line">0x1000014500x00000033[  5] -[SceneDelegate .cxx_destruct]</span><br><span class="line">0x1000014840x00000006[  6] _NSStringFromClass</span><br></pre></td></tr></table></figure></div><p>解析后：<br><a href="https://ae01.alicdn.com/kf/Ue44e074f9f6a4df78e2740c56b1536074.jpg" data-fancybox="group" data-caption="" class="fancybox"><img alt="" title="" data-src="https://ae01.alicdn.com/kf/Ue44e074f9f6a4df78e2740c56b1536074.jpg" class="lazyload"></a></p><p>-</p><h1 id="One-More-Thing"><a href="#One-More-Thing" class="headerlink" title="One More Thing"></a>One More Thing</h1><p><a href="https://docs.qq.com/sheet/DQkhZTVdhbVB2dEVO?c=A2A0A0" target="_blank" rel="noopener">点击查看 2020—课程列表 全网IT各种资源有需求的可以微我，或者你喜欢的课程都可以给我发链接剩下的我来搞定</a></p><p>喜欢的朋友可以扫描关注我的公众号(多多点赞，多多打赏，您的支持是我写作的最大动力）<code>关注有福利可以使用免费梯子自由上网</code></p><p><a href="https://ae01.alicdn.com/kf/Udde8350c2b484ac6b4d7f9c3ea1c52822.jpg" data-fancybox="group" data-caption="iOS_DevTips" class="fancybox"><img alt="iOS_DevTips" title="iOS_DevTips" data-src="https://ae01.alicdn.com/kf/Udde8350c2b484ac6b4d7f9c3ea1c52822.jpg" class="lazyload"></a></p>]]></content>
+    
+    <summary type="html">
+    
+      我们开发完一个项目将来肯定是要进行编译，然后打包上传到APPStore提供给用户下载，那我们最终打包是什么格式呢？其实是一个IPA包，那首先我们来看看安装包的组成
+
+安装包（ipa）主要由可执行文件、资源组成
+ * 资源（图片、音频、视频等）
+   
+    * 采取无损压缩:网上有很多，我常用的像 TinyPng、Squoosh、图好快 等等
+      
+      
+    * 去除没用到的资源：大家可以试试GitHub上有个开源项目可以检测项目里没用的资源文件 GitHub传送门
+      
+      
+   
+   
+ * 可执行文件瘦身
+   
+    * 编译器优化 现在的新
+    
+    </summary>
+    
+    
+      <category term="iOS" scheme="https://lizhaobomb.github.io/categories/iOS/"/>
+    
+      <category term="性能优化" scheme="https://lizhaobomb.github.io/categories/iOS/%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96/"/>
+    
+    
+      <category term="iOS" scheme="https://lizhaobomb.github.io/tags/iOS/"/>
+    
+      <category term="性能" scheme="https://lizhaobomb.github.io/tags/%E6%80%A7%E8%83%BD/"/>
+    
+      <category term="瘦身" scheme="https://lizhaobomb.github.io/tags/%E7%98%A6%E8%BA%AB/"/>
+    
+  </entry>
   
   <entry>
     <title>iOS性能优化08-启动优化02-分析</title>
