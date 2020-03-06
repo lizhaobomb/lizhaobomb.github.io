@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="https://lizhaobomb.github.io/"/>
-  <updated>2020-03-05T15:49:48.814Z</updated>
+  <updated>2020-03-06T15:19:52.937Z</updated>
   <id>https://lizhaobomb.github.io/</id>
   
   <author>
@@ -15,6 +15,45 @@
   </author>
   
   <generator uri="https://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>设计模式与架构01-简介</title>
+    <link href="https://lizhaobomb.github.io/2020/03/06/iOS%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F%E4%B8%8E%E6%9E%B6%E6%9E%8401-%E7%AE%80%E4%BB%8B/"/>
+    <id>https://lizhaobomb.github.io/2020/03/06/iOS%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F%E4%B8%8E%E6%9E%B6%E6%9E%8401-%E7%AE%80%E4%BB%8B/</id>
+    <published>2020-03-05T16:10:00.000Z</published>
+    <updated>2020-03-06T15:19:52.937Z</updated>
+    
+    <content type="html"><![CDATA[<blockquote><p>其实一旦牵扯到这个话题，都是相对来说比较抽象的一个话题，当然这个需要结合我们更多的实战，如果你经历了更多的项目实战呢，对这个设计模式与架构可能会有一个比较全面或者比较深入的一个认识，如果你做的项目不是很多，那你对这个设计模式与架构理解可能不够，可能迷迷糊糊的，感受不到设计模式与架构给项目带来的好处，今天我们就来先来个开篇简单介绍下，常见的面试题以及何为架构</p></blockquote><h3 id="常见的面试题"><a href="#常见的面试题" class="headerlink" title="常见的面试题"></a>常见的面试题</h3><blockquote><p>1、讲讲 <code>MVC</code>、<code>MVVM</code>、<code>MVP</code>，以及你在项目里具体是怎么写的？</p></blockquote><blockquote><p>2、你自己用过哪些<code>设计模式</code>？</p></blockquote><blockquote><p>3、一般开始做一个项目，你的架构是如何思考的？</p></blockquote><h3 id="首先我们来认识下什么是架构？"><a href="#首先我们来认识下什么是架构？" class="headerlink" title="首先我们来认识下什么是架构？"></a>首先我们来认识下什么是架构？</h3><ul><li>架构（Architecture）<ul><li>软件开发中的<code>设计方案</code></li><li><code>类与类</code>之间的关系、<code>模块与模块</code>之间的关系、<code>客户端与服务端</code>的关系</li></ul></li></ul><blockquote><p>所以我们看架构可大可小，大到<code>客户端与服务端</code>的关系，小到<code>类与类之间</code>的关系，都在架构的范畴</p></blockquote><ul><li>经常听到的架构名词<ul><li><code>MVC</code>、<code>MVP</code>、<code>MVVM</code>、<code>VIPER</code>、<code>CDD</code> (接下来会主要介绍前三个，其它的其实也都是前三个的变种)</li><li><code>三层架构</code>、<code>四层架构</code> (大家不要慌，接下来都会介绍)</li><li>……</li></ul></li></ul><h2 id="今天先到这里，明天接着更新"><a href="#今天先到这里，明天接着更新" class="headerlink" title="今天先到这里，明天接着更新"></a>今天先到这里，明天接着更新</h2><h1 id="One-More-Thing"><a href="#One-More-Thing" class="headerlink" title="One More Thing"></a><a href="https://lizhaobomb.github.io">One More Thing</a></h1><p><a href="https://docs.qq.com/sheet/DQkhZTVdhbVB2dEVO?c=A2A0A0" target="_blank" rel="noopener">点击查看 2020—课程列表 全网IT各种资源有需求的可以微我，或者你喜欢的课程都可以给我发链接剩下的我来搞定</a></p><p>喜欢的朋友可以扫描关注我的公众号(多多点赞，多多打赏，您的支持是我写作的最大动力）<code>关注有福利可以使用免费梯子自由上网</code></p><p><a href="https://ae01.alicdn.com/kf/Udde8350c2b484ac6b4d7f9c3ea1c52822.jpg" data-fancybox="group" data-caption="iOS_DevTips" class="fancybox"><img alt="iOS_DevTips" title="iOS_DevTips" data-src="https://ae01.alicdn.com/kf/Udde8350c2b484ac6b4d7f9c3ea1c52822.jpg" class="lazyload"></a></p>]]></content>
+    
+    <summary type="html">
+    
+      其实一旦牵扯到这个话题，都是相对来说比较抽象的一个话题，当然这个需要结合我们更多的实战，如果你经历了更多的项目实战呢，对这个设计模式与架构可能会有一个比较全面或者比较深入的一个认识，如果你做的项目不是很多，那你对这个设计模式与架构理解可能不够，可能迷迷糊糊的，感受不到设计模式与架构给项目带来的好处，今天我们就来先来个开篇简单介绍下，常见的面试题以及何为架构
+
+常见的面试题
+1、讲讲 MVC、MVVM、MVP，以及你在项目里具体是怎么写的？
+
+2、你自己用过哪些设计模式？
+
+3、一般开始做一个项目，你的架构是如何思考的？
+
+首先我们来认识下什么是架构？
+ * 架构（Architecture） *
+    
+    </summary>
+    
+    
+      <category term="iOS" scheme="https://lizhaobomb.github.io/categories/iOS/"/>
+    
+      <category term="设计模式与架构" scheme="https://lizhaobomb.github.io/categories/iOS/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F%E4%B8%8E%E6%9E%B6%E6%9E%84/"/>
+    
+    
+      <category term="iOS" scheme="https://lizhaobomb.github.io/tags/iOS/"/>
+    
+      <category term="设计模式" scheme="https://lizhaobomb.github.io/tags/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/"/>
+    
+      <category term="架构" scheme="https://lizhaobomb.github.io/tags/%E6%9E%B6%E6%9E%84/"/>
+    
+  </entry>
   
   <entry>
     <title>iOS性能优化09-安装包瘦身</title>
